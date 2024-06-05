@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">TernakApp</string>
+    <string name="title_home">Home</string>
+    <string name="title_laporan">Request</string>
+    <string name="title_profile">Profile</string>
+    <string name="loginTitleTextView">Masuk</string>
+    <string name="loginDescTextView">Selamat datang di <font style='bold'><b>SiTernak!</b></font>\ Masuk untuk memulai perjalananmu dengan kami.</string>
+    <string name="login_edit_kata_sandi">Kata Sandi</string>
+    <string name="login_edit_email">Email</string>
+    <string name="registerTextTitleView">Daftar</string>
+    <string name="registerDescTextView">Sebelum menggunakan layanan aplikasi, isi informasi dirimu dulu, ya!</string>
+    <string name="hint_province">Pilih Provinsi</string>
+    <string name="hint_city">Pilih Kabupaten/Kota</string>
+    <string name="hint_kecamatan">Pilih Kecamatan</string>
+</resources>

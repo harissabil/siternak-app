@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "632396168065",
+    "project_id": "otpauthternak",
+    "storage_bucket": "otpauthternak.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:632396168065:android:08f441e28eea9e9a094680",
+        "android_client_info": {
+          "package_name": "com.example.ternakapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_AnbBNkn9HW04TZn23p_hn4Ow6vgdc1Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

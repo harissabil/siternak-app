@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp">
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_back"
+        android:layout_width="12dp"
+        android:layout_height="20dp"
+        android:background="@drawable/baseline_back_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/change_profile_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:text="Tambah Aksi"
+        android:textColor="@color/title_black"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/button_back"
+        app:layout_constraintTop_toTopOf="@+id/button_back"
+        tools:layout_editor_absoluteX="20dp" />
+
+    <TextView
+        android:id="@+id/tv_jenis_ternak"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="Jenis Ternak"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@color/title_black"
+        app:layout_constraintTop_toBottomOf="@+id/change_profile_tv"
+        tools:layout_editor_absoluteX="20dp" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/ed_jenis_ternak_layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_jenis_ternak">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:ems="20"
+            android:hint="Masukkan jenis ternak"
+            android:importantForAutofill="no"
+            android:inputType="textEmailAddress"
+            android:drawablePadding="5dp"
+            tools:ignore="SpeakableTextPresentCheck" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/tv_jenis_aksi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Jenis Aksi"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@color/title_black"
+        app:layout_constraintTop_toBottomOf="@+id/ed_jenis_ternak_layout"
+        tools:layout_editor_absoluteX="20dp" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/ed_jenis_aksi_layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_jenis_aksi">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:ems="20"
+            android:hint="Masukkan jenis aksi"
+            android:importantForAutofill="no"
+            android:inputType="textEmailAddress"
+            android:drawablePadding="5dp"
+            tools:ignore="SpeakableTextPresentCheck" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/tv_keterangan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Keterangan"
+        android:textColor="@color/title_black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@+id/ed_jenis_aksi_layout"
+        tools:layout_editor_absoluteX="20dp" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/ed_keterangan"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_keterangan">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:ems="40"
+            android:hint="Rincikan keluhan/permintaan"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            tools:ignore="SpeakableTextPresentCheck,TextFields" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_send"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@drawable/button_background"
+        android:text="Kirim"
+        android:textAllCaps="false"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:cornerRadius="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:ignore="MissingConstraints"/>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        style="?android:attr/progressBarStyle"
+        tools:visibility="gone"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
