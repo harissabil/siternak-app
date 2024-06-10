@@ -31,13 +31,13 @@ class LoginViewModel(): ViewModel() {
                 if (response.isSuccessful) {
                     _loginResponse.value = response.body()
                 } else {
-                    _message.value = response.message()
+                    _message.value = response.body()?.message ?: "Gagal login: ${response.body()?.message}"
                 }
             }
 
             override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
                 _isLoading.value = false
-                _message.value = t.localizedMessage
+                _message.value = "Gagal: ${t.message}"
             }
         })
     }

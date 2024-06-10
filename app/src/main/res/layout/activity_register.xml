@@ -112,7 +112,7 @@
                 android:ems="30"
                 android:hint="Nama Lengkap"
                 android:importantForAutofill="no"
-                android:inputType="textPassword"
+                android:inputType="text"
                 android:drawablePadding="5dp"
                 android:drawableStart="@drawable/icon_change_profile_fill"
                 tools:ignore="SpeakableTextPresentCheck" />

@@ -21,7 +21,6 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -34,17 +33,15 @@
         <activity android:name=".ui.post.PostFragment"
             android:exported="false" />
         <activity android:name=".ui.post.add.AddPostActivity"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:exported="true">
         </activity>
         <activity android:name=".ui.post.detail.PostDetailActivity"
             android:exported="false" />
         <activity android:name=".ui.profile.ProfileFragment"
             android:exported="false" />
-        <meta-data android:name="org.osmdroid.config" android:value="org.osmdroid.config.Configuration" />
+
+        <meta-data android:name="org.osmdroid.config"
+            android:value="org.osmdroid.config.Configuration" />
         <meta-data
             android:name="org.osmdroid.basePath"
             android:value="osmdroid" />

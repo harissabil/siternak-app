@@ -1,11 +1,13 @@
 package com.example.ternakapp.ui.login
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import com.example.ternakapp.MainActivity
 import com.example.ternakapp.databinding.ActivityLoginBinding
 import com.example.ternakapp.ui.register.RegisterActivity
 
@@ -38,10 +40,17 @@ class LoginActivity : AppCompatActivity() {
         viewModel.loginResponse.observe(this, Observer { response ->
             if (response.status == "success") {
                 Toast.makeText(this, "Berhasil login", Toast.LENGTH_SHORT).show()
-                // akses UserResponse
-                val user = response.dataUser
-
-                Toast.makeText(this, "Halo, ${user.nama}", Toast.LENGTH_SHORT).show()
+                // simpan status login ke SharedPreferences
+                val sharedPref = getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+                with (sharedPref.edit()) {
+                    putBoolean("is_logged_in", true)
+                    putString("user_id", response.dataUser.userId)
+                    apply()
+                }
+                // arahkan ke MainActivity
+                val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                startActivity(intent)
+                finish()
             } else {
                 Toast.makeText(this, "Gagal login: ${response.message}", Toast.LENGTH_SHORT).show()
             }
