@@ -1,5 +1,6 @@
 package com.example.ternakapp.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
@@ -12,7 +13,7 @@ import com.example.ternakapp.ui.post.detail.PostDetailActivity
 
 class PostAdapter(
     private val context: Context,
-    var postList: List<PostResponse>,
+    private var post: PostResponse?,
     private val onItemClick: (PostResponse) -> Unit
 ) : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
 
@@ -30,7 +31,7 @@ class PostAdapter(
         override fun onClick(v: View?) {
             val position = adapterPosition
             if (position != RecyclerView.NO_POSITION) {
-                onItemClick(postList[position])
+                post?.let { onItemClick(it) }
             }
         }
     }
@@ -42,10 +43,14 @@ class PostAdapter(
     }
 
     override fun onBindViewHolder(holder: PostAdapter.PostViewHolder, position: Int) {
-        holder.bind(postList[position])
+        post?.let { holder.bind(it) }
     }
 
-    override fun getItemCount(): Int {
-        return postList.size
+    override fun getItemCount(): Int = if (post == null) 0 else 1
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun updatePost(newPost: PostResponse) {
+        post = newPost
+        notifyDataSetChanged()
     }
 }

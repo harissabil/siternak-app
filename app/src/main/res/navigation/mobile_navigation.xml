@@ -2,7 +2,8 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/bottom_navigation">
+    android:id="@+id/bottom_navigation"
+    app:startDestination="@id/navigation_home">
 
     <fragment
         android:id="@+id/navigation_home"
@@ -10,10 +11,10 @@
         tools:layout="@layout/fragment_home"
         android:label="HomeFragment" />
     <fragment
-        android:id="@+id/navigation_laporan"
+        android:id="@+id/navigation_post"
         tools:layout="@layout/fragment_post"
         android:name="com.example.ternakapp.ui.post.PostFragment"
-        android:label="LaporanFragment" />
+        android:label="PostFragment" />
     <fragment
         android:id="@+id/navigation_profile"
         tools:layout="@layout/fragment_profile"

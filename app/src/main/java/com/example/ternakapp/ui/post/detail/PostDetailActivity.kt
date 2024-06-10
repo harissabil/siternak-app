@@ -72,5 +72,7 @@ class PostDetailActivity : AppCompatActivity() {
             intent.putExtra("POST_ID", postId)
             startActivity(intent)
         }
+
+        supportActionBar?.title = "Detail Post"
     }
 }

@@ -33,11 +33,10 @@ class PostFragment : Fragment() {
         return root
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = PostAdapter(requireContext(), emptyList()) { post ->
+        val adapter = PostAdapter(requireContext(), null) { post ->
             val intent = Intent(requireContext(), PostDetailActivity::class.java).apply {
                 putExtra("POST_ID", post.postId)
             }
@@ -52,9 +51,14 @@ class PostFragment : Fragment() {
             startActivity(intent)
         }
 
-        viewModel.posts.observe(viewLifecycleOwner, Observer { posts ->
-            adapter.postList = posts
-            adapter.notifyDataSetChanged()
+        viewModel.posts.observe(viewLifecycleOwner, Observer { post ->
+            if (post != null) {
+                binding.rvStory.visibility = View.GONE
+                binding.tvNoPosts.visibility = View.VISIBLE
+            } else {
+                binding.rvStory.visibility = View.VISIBLE
+                binding.tvNoPosts.visibility = View.GONE
+            }
         })
 
         viewModel.isLoading.observe(viewLifecycleOwner, Observer { isLoading ->

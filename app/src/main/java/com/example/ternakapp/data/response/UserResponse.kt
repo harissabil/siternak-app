@@ -5,10 +5,16 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
 // insert response for user profile
+data class ApiResponse(
+    val status: String,
+    val message: String,
+    val dataUser: UserResponse
+)
 
 @Parcelize
 data class UserResponse(
     val userId: String,
+    val nama: String,
     val noTelp: String,
     val password: String,
     val alamat: String,

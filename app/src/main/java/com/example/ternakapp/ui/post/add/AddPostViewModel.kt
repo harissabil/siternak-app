@@ -43,22 +43,22 @@ class AddPostViewModel : ViewModel() {
         })
     }
 
-    fun addNewPost(jenisTernak: String, jenisAksi: String, keterangan: String) {
+    fun addNewPost(jenisTernak: String, jenisAksi: String, keterangan: String, latitude: Double, longitude: Double) {
         _isLoading.value = true
         val apiService = ApiConfig.getApiService()
-        val call = apiService.addPost(jenisTernak, jenisAksi, keterangan)
+        val call = apiService.addPost(jenisTernak, jenisAksi, keterangan, latitude, longitude)
 
-        call.enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+        call.enqueue(object : Callback<PostResponse> {
+            override fun onResponse(call: Call<PostResponse>, response: Response<PostResponse>) {
                 _isLoading.value = false
                 if (response.isSuccessful) {
                     _message.value = "Data berhasil ditambahkan"
                 } else {
-                    _message.value = "Gagal menambahkan data"
+                    _message.value = "Gagal menambahkan data: ${response.errorBody()?.string()}"
                 }
             }
 
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+            override fun onFailure(call: Call<PostResponse>, t: Throwable) {
                 _isLoading.value = false
                 _message.value = "Gagal menambahkan data: ${t.message}"
             }
@@ -70,8 +70,8 @@ class AddPostViewModel : ViewModel() {
         val apiService = ApiConfig.getApiService()
         val call = apiService.updatePost(postId, jenisTernak, jenisAksi, keterangan)
 
-        call.enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+        call.enqueue(object : Callback<PostResponse> {
+            override fun onResponse(call: Call<PostResponse>, response: Response<PostResponse>) {
                 _isLoading.value = false
                 if (response.isSuccessful) {
                     _message.value = "Data berhasil diperbarui"
@@ -80,7 +80,7 @@ class AddPostViewModel : ViewModel() {
                 }
             }
 
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+            override fun onFailure(call: Call<PostResponse>, t: Throwable) {
                 _isLoading.value = false
                 _message.value = "Gagal memperbarui data: ${t.message}"
             }

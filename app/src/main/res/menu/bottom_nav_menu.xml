@@ -7,8 +7,8 @@
         android:title="Beranda" />
 
     <item
-        android:id="@+id/navigation_laporan"
-        android:icon="@drawable/icon_laporan"
+        android:id="@+id/navigation_post"
+        android:icon="@drawable/icon_post"
         android:title="Laporan" />
 
     <item

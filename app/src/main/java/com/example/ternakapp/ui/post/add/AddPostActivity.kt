@@ -1,27 +1,40 @@
 package com.example.ternakapp.ui.post.add
 
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.example.ternakapp.data.response.PostResponse
-import com.example.ternakapp.data.retrofit.ApiConfig
+import androidx.core.app.ActivityCompat
 import com.example.ternakapp.databinding.ActivityAddPostBinding
-import retrofit2.Call
-import retrofit2.Callback
-import okhttp3.ResponseBody
-import retrofit2.Response
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 
 class AddPostActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddPostBinding
     private val viewModel: AddPostViewModel by viewModels()
-    private var postId:String? = null
+    private var postId: String? = null
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
 
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
         binding = ActivityAddPostBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+        // Register the activity result launcher
+        requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+            if (isGranted) {
+                Toast.makeText(this, "Izin lokasi diberikan", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Izin lokasi ditolak", Toast.LENGTH_SHORT).show()
+            }
+        }
 
         postId = intent.getStringExtra("POST_ID")
         if (postId != null) {
@@ -54,13 +67,38 @@ class AddPostActivity : AppCompatActivity() {
             val jenisAksi = binding.edJenisAksiLayout.editText?.text.toString().trim()
             val keterangan = binding.edKeterangan.editText?.text.toString().trim()
 
-            if (postId != null) {
-                viewModel.updatePost(postId!!, jenisTernak, jenisAksi, keterangan)
-            } else {
-                viewModel.addNewPost(jenisTernak, jenisAksi, keterangan)
+            if (ActivityCompat.checkSelfPermission(
+                    this,
+                    android.Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                    this,
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                requestLocationPermission()
+                return@setOnClickListener
             }
+
+            fusedLocationClient.lastLocation
+                .addOnSuccessListener { location ->
+                    location?.let {
+                        val latitude = it.latitude
+                        val longitude = it.longitude
+
+                        if (postId != null) {
+                            viewModel.updatePost(postId!!, jenisTernak, jenisAksi, keterangan)
+                        } else {
+                            viewModel.addNewPost(jenisTernak, jenisAksi, keterangan, latitude, longitude)
+                        }
+                    } ?: run {
+                        Toast.makeText(this, "Gagal mendapatkan lokasi", Toast.LENGTH_SHORT).show()
+                    }
+                }
         }
 
         supportActionBar?.hide()
+    }
+    private fun requestLocationPermission() {
+        requestPermissionLauncher.launch(android.Manifest.permission.ACCESS_FINE_LOCATION)
     }
 }

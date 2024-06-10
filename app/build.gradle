@@ -59,6 +59,7 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-gson:2.9.0"
     implementation "com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.10"
     implementation 'androidx.activity:activity-ktx:1.9.0'
+    implementation 'com.google.code.gson:gson:2.8.8'
 
     //datastore
     implementation 'androidx.datastore:datastore-preferences:1.0.0'
@@ -83,4 +84,7 @@ dependencies {
     //map
     implementation 'org.osmdroid:osmdroid-android:6.1.11'
     implementation 'org.osmdroid:osmdroid-wms:6.1.11'
+
+    //location
+    implementation 'com.google.android.gms:play-services-location:21.0.1'
 }

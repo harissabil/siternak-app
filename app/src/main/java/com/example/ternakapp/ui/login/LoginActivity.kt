@@ -1,17 +1,17 @@
 package com.example.ternakapp.ui.login
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import android.view.inputmethod.InputMethodManager
-import androidx.appcompat.app.AlertDialog
+import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import com.example.ternakapp.databinding.ActivityLoginBinding
 import com.example.ternakapp.ui.register.RegisterActivity
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
+    private val viewModel: LoginViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,18 +21,12 @@ class LoginActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         binding.loginButton.setOnClickListener {
-            run {
-                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(it.windowToken, 0)
-
-                if (binding.loginEditPhone.text.toString().isEmpty() || binding.loginEditPassword.text.toString().isEmpty())
-                {
-                    showFailedDialog("Pastikan semua data terisi")
-                }
-
-                else if (binding.loginEditPhone.error == null && binding.loginEditPassword.error == null) {
-                    // masukkan val loginViewModel dari class LoginViewModel
-                }
+            val noTelp = binding.loginEditPhone.text.toString()
+            val password = binding.loginEditPassword.text.toString()
+            if (noTelp.isNotEmpty() && password.isNotEmpty()) {
+                viewModel.loginUser(noTelp, password)
+            } else {
+                Toast.makeText(this, "Nomor HP dan Kata Sandi tidak boleh kosong", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -40,21 +34,31 @@ class LoginActivity : AppCompatActivity() {
             val intent = Intent(this@LoginActivity, RegisterActivity::class.java)
             startActivity(intent)
         }
-    }
 
-    private fun showFailedDialog(message: String) {
-        showLoading(false)
-        AlertDialog.Builder(this).apply {
-            setTitle("Failed")
-            setMessage(message)
-            setPositiveButton("Continue") { dialog, _ -> dialog.dismiss() }
-            create()
-            show()
-        }
-    }
+        viewModel.loginResponse.observe(this, Observer { response ->
+            if (response.status == "success") {
+                Toast.makeText(this, "Berhasil login", Toast.LENGTH_SHORT).show()
+                // akses UserResponse
+                val user = response.dataUser
 
-    private fun showLoading(isLoading: Boolean) {
-        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-    }
+                Toast.makeText(this, "Halo, ${user.nama}", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Gagal login: ${response.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
 
+        viewModel.isLoading.observe(this, Observer { isLoading ->
+            binding.progressBar.visibility = if (isLoading) {
+                android.view.View.VISIBLE
+            } else {
+                android.view.View.GONE
+            }
+        })
+
+        viewModel.message.observe(this, Observer { message ->
+            message?.let {
+                Toast.makeText(this, message ?: "Error", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
 }
