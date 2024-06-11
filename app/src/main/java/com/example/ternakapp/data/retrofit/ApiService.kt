@@ -1,30 +1,18 @@
 package com.example.ternakapp.data.retrofit
 
-import com.example.ternakapp.data.response.ApiPostResponse
-import com.example.ternakapp.data.response.ApiResponse
-import com.example.ternakapp.data.response.PostResponse
-import okhttp3.ResponseBody
+import com.example.ternakapp.data.response.*
 import retrofit2.Call
 import retrofit2.http.*
 
 interface ApiService {
-    @FormUrlEncoded
     @POST("user/login")
     fun loginUser(
-        @Field("noTelp") noTelp: String,
-        @Field("password") password: String
+        @Body loginResponse: LoginDataClass
     ): Call<ApiResponse>
 
-    @FormUrlEncoded
     @POST("user/register")
     fun registerUser(
-        @Field("nama") nama: String,
-        @Field("noTelp") noTelp: String,
-        @Field("password") password: String,
-        @Field("alamat") alamat: String,
-        @Field("kecamatan") kecamatan: String,
-        @Field("kota") kota: String,
-        @Field("provinsi") provinsi: String
+        @Body registerResponse: RegisterDataClass
     ): Call<ApiResponse>
 
     @FormUrlEncoded
@@ -59,5 +47,5 @@ interface ApiService {
     ): Call<PostResponse>
 
     @DELETE("post/{id}")
-    fun deletePost(@Path("id") id: String): Call<ResponseBody>
+    fun deletePost(@Path("id") id: String): Call<PostResponse>
 }

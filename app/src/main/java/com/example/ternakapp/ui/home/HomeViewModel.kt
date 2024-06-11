@@ -30,7 +30,7 @@ class HomeViewModel : ViewModel() {
                 _isLoading.value = false
                 if (response.isSuccessful) {
                     val apiResponse = response.body()
-                    _posts.value = apiResponse?.dataPost?.post?.let { listOf(it) } ?: emptyList()
+                    _posts.value = apiResponse?.data?.post?.let { listOf(it) } ?: emptyList()
                 } else {
                     _message.value = "Gagal memuat data: ${response.errorBody()?.string()}"
                 }

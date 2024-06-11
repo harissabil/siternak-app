@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.ternakapp.data.response.ApiResponse
+import com.example.ternakapp.data.response.RegisterDataClass
 import com.example.ternakapp.data.retrofit.ApiConfig
 import retrofit2.Call
 import retrofit2.Callback
@@ -31,7 +32,7 @@ class RegisterViewModel : ViewModel() {
     ) {
         _isLoading.value = true
         val apiService = ApiConfig.getApiService()
-        val call = apiService.registerUser(noTelp, password, nama, provinsi, kota, kecamatan, alamat)
+        val call = apiService.registerUser(RegisterDataClass(noTelp, password, nama, provinsi, kota, kecamatan, alamat))
 
         call.enqueue(object : Callback<ApiResponse> {
             override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {

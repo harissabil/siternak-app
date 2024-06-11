@@ -29,7 +29,7 @@ class PostViewModel : ViewModel() {
             override fun onResponse(call: Call<ApiPostResponse>, response: Response<ApiPostResponse>) {
                 _isLoading.value = false
                 if (response.isSuccessful) {
-                    response.body()?.dataPost?.post?.let {
+                    response.body()?.data?.post?.let {
                         _posts.value = it
                     } ?: run {
                         _message.value = "Belum ada data"

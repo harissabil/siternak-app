@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
+import retrofit2.http.Field
 
 @Parcelize
 data class PostResponse(
@@ -24,9 +25,17 @@ data class PostResponse(
 data class ApiPostResponse(
     val status: String,
     val message: String,
-    val dataPost: PostData
+    val data: PostData
 )
 
 data class PostData(
     val post: PostResponse
+)
+
+data class PostDataClass(
+    @SerializedName("jenis_ternak") val jenisTernak: String,
+    @SerializedName("jenis_aksi") val jenisAksi: String,
+    val keterangan: String,
+    val longitude: Double,
+    val latitude: Double
 )

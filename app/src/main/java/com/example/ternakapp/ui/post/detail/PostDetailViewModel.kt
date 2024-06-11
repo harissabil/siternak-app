@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.ternakapp.data.response.PostResponse
 import com.example.ternakapp.data.retrofit.ApiConfig
-import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -48,8 +47,8 @@ class PostDetailViewModel : ViewModel() {
         val apiService = ApiConfig.getApiService()
         val call = apiService.deletePost(postId)
 
-        call.enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+        call.enqueue(object : Callback<PostResponse> {
+            override fun onResponse(call: Call<PostResponse>, response: Response<PostResponse>) {
                 _isLoading.value = false
                 if (response.isSuccessful) {
                     _message.value = "Post berhasil dihapus"
@@ -59,7 +58,7 @@ class PostDetailViewModel : ViewModel() {
                 }
             }
 
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+            override fun onFailure(call: Call<PostResponse>, t: Throwable) {
                 _isLoading.value = false
                 _message.value = "Gagal menghapus post: ${t.message}"
             }

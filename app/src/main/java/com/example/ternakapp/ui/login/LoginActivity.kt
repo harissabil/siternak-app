@@ -3,6 +3,7 @@ package com.example.ternakapp.ui.login
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -38,15 +39,19 @@ class LoginActivity : AppCompatActivity() {
         }
 
         viewModel.loginResponse.observe(this, Observer { response ->
+            Log.d("LoginActivity", "user_id: ${response}")
             if (response.status == "success") {
                 Toast.makeText(this, "Berhasil login", Toast.LENGTH_SHORT).show()
                 // simpan status login ke SharedPreferences
                 val sharedPref = getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
                 with (sharedPref.edit()) {
                     putBoolean("is_logged_in", true)
-                    putString("user_id", response.dataUser.userId)
+                    // putString("auth_token", userResponse.token) // Sesuaikan dengan token Anda
+                    // putString("user_id", response.data.userId)
+                    putString("user_name", response.data.nama)
                     apply()
                 }
+                Log.d("LoginActivity", "user_id: ${response}")
                 // arahkan ke MainActivity
                 val intent = Intent(this@LoginActivity, MainActivity::class.java)
                 startActivity(intent)

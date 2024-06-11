@@ -18,6 +18,7 @@
         tools:src="@tools:sample/avatars" />
 
     <TextView
+        android:id="@+id/tv_nama_pengguna"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="18dp"
@@ -99,7 +100,7 @@
         tools:ignore="MissingConstraints" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/exit_button"
+        android:id="@+id/btn_logout"
         android:layout_height="70dp"
         android:layout_width="match_parent"
         android:layout_marginStart="30dp"

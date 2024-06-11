@@ -8,7 +8,7 @@ import kotlinx.parcelize.Parcelize
 data class ApiResponse(
     val status: String,
     val message: String,
-    val dataUser: UserResponse
+    val data: UserResponse
 )
 
 @Parcelize
@@ -17,9 +17,25 @@ data class UserResponse(
     val nama: String,
     val noTelp: String,
     val password: String,
-    val alamat: String,
-    val kecamatan: String,
+    val provinsi: String,
     val kota: String,
-    val provinsi: String
+    val kecamatan: String,
+    val alamat: String,
 ) : Parcelable
 
+data class RegisterDataClass(
+    @field:SerializedName("no_telp")
+    val noTelp: String,
+    val password: String,
+    val nama: String,
+    val provinsi: String,
+    val kota: String,
+    val kecamatan: String,
+    val alamat: String
+)
+
+data class LoginDataClass(
+    @field:SerializedName("no_telp")
+    val noTelp: String,
+    val password: String
+)
