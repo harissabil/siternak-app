@@ -5,47 +5,45 @@ import retrofit2.Call
 import retrofit2.http.*
 
 interface ApiService {
-    @POST("user/login")
+    @POST("api/v1/auth/login")
     fun loginUser(
         @Body loginResponse: LoginDataClass
-    ): Call<ApiResponse>
+    ): Call<LoginResponse>
 
-    @POST("user/register")
+    @POST("api/v1/auth/register")
     fun registerUser(
         @Body registerResponse: RegisterDataClass
-    ): Call<ApiResponse>
+    ): Call<RegisterResponse>
 
-    @FormUrlEncoded
-    @POST("post")
+    @POST("api/v1/post")
     fun addPost(
-        @Field("jenisTernak") jenisTernak: String,
-        @Field("jenisAksi") jenisAksi: String,
-        @Field("keterangan") keterangan: String,
-        @Field("latitude") latitude: Double,
-        @Field("longitude") longitude: Double
+        @Header("Authorization") token: String,
+        @Body postResponse: PostDataClass
     ): Call<PostResponse>
 
-    @GET("post")
-    fun getAllPostsWithLoc(
-        @Field("location") location: Int
-    ): Call<ApiPostResponse>
+    @GET("api/v1/post/myposts")
+    fun getAllPostsByUserId(
+        @Header("Authorization") token: String
+    ): Call<PostItem>
 
-    @GET("post")
-    fun getAllPosts(): Call<ApiPostResponse>
+    @GET("api/v1/post/")
+    fun getAllPosts(): Call<List<Post>>
 
-    @GET("post/{id}")
-    fun getPostById(postId: String): Call<PostResponse>
-    //fun getPostById(@Path("id") id: String): Call<PostResponse>
+    @GET("api/v1/post/{id}")
+    fun getPostById(
+        postId: String
+    ): Call<PostResponse>
 
-    @FormUrlEncoded
-    @PUT("post/{id}")
+    @PUT("api/v1/post/{id}")
     fun updatePost(
+        @Header("Authorization") token: String,
         @Path("id") id: String,
-        @Field("jenisTernak") jenisTernak: String,
-        @Field("jenisAksi") jenisAksi: String,
-        @Field("keterangan") keterangan: String
+        @Body postResponse: UpdatePostDataClass,
     ): Call<PostResponse>
 
-    @DELETE("post/{id}")
-    fun deletePost(@Path("id") id: String): Call<PostResponse>
+    @DELETE("api/v1/post/{id}")
+    fun deletePost(
+        @Header("Authorization") token: String,
+        @Path("id") id: String
+    ): Call<DeleteResponse>
 }

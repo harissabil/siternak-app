@@ -13,7 +13,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.ternakapp.adapter.PostAdapter
+import com.example.ternakapp.data.local.AuthPreference
 import com.example.ternakapp.databinding.FragmentPostBinding
+import com.example.ternakapp.ui.login.LoginActivity
 import com.example.ternakapp.ui.post.add.AddPostActivity
 import com.example.ternakapp.ui.post.detail.PostDetailActivity
 
@@ -35,6 +37,14 @@ class PostFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val authPreference = AuthPreference(requireContext())
+        val token = authPreference.getToken()
+
+        if (token.isNullOrEmpty()) {
+            navigateToLogin()
+            return
+        }
 
         val adapter = PostAdapter(requireContext(), null) { post ->
             val intent = Intent(requireContext(), PostDetailActivity::class.java).apply {
@@ -71,7 +81,14 @@ class PostFragment : Fragment() {
             }
         })
 
-        viewModel.loadPosts()
+        viewModel.loadPosts(token)
+    }
+
+    private fun navigateToLogin() {
+        val intent = Intent(requireContext(), LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        requireActivity().finish()
     }
 
     override fun onDestroyView() {

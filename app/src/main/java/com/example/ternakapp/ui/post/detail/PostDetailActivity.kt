@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import com.example.ternakapp.data.local.AuthPreference
 import com.example.ternakapp.data.response.PostResponse
 import com.example.ternakapp.data.retrofit.ApiConfig
 import com.example.ternakapp.databinding.ActivityAddPostBinding
@@ -36,13 +37,13 @@ class PostDetailActivity : AppCompatActivity() {
 
         viewModel.post.observe(this, Observer { post ->
             post?.let {
-                binding.edPostId.text = it.postId
-                binding.edPetugas.text = it.petugas
-                binding.edJenisTernak.text = it.jenisTernak
-                binding.edJenisAksi.text = it.jenisAksi
-                binding.tvPostTanggal.text = it.createdAt
-                binding.tvActionKeterangan.text = it.keterangan
-                binding.tvActionStatus.text = it.status
+                binding.edPostId.text = it.data.postId
+                binding.edPetugas.text = it.data.petugas
+                binding.edJenisTernak.text = it.data.jenisTernak
+                binding.edJenisAksi.text = it.data.jenisAksi
+                binding.tvPostTanggal.text = it.data.createdAt
+                binding.tvActionKeterangan.text = it.data.keterangan
+                binding.tvActionStatus.text = it.data.status
             }
         })
 
@@ -64,7 +65,15 @@ class PostDetailActivity : AppCompatActivity() {
         }
 
         binding.btnDelete.setOnClickListener {
-            postId?.let { id -> viewModel.deletePost(id)}
+            postId?.let { id ->
+                val authPreference = AuthPreference(this)
+                val token = authPreference.getToken()
+                if (token != null) {
+                    viewModel.deletePost(token, id)
+                } else {
+                    Toast.makeText(this, "Token tidak ditemukan. Silakan login kembali.", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
 
         binding.btnEdit.setOnClickListener {

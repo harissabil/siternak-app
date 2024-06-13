@@ -5,37 +5,190 @@ import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 import retrofit2.http.Field
+import java.util.Date
 
-@Parcelize
+// response for addPost
 data class PostResponse(
-    @PrimaryKey(autoGenerate = false)
-    @SerializedName("user_id") val userId: String?,
-    @SerializedName("post_id") val postId: String,
-    @SerializedName("jenis_ternak") val jenisTernak: String,
-    @SerializedName("jenis_aksi") val jenisAksi: String,
-    val keterangan: String,
-    val longitude: Double? = null,
-    val latitude: Double? = null,
-    @SerializedName("created_at") val createdAt: String,
-    @SerializedName("updated_at") val updatedAt: String,
-    val petugas: String,
+    @SerializedName("status")
     val status: String,
-) : Parcelable
 
-data class ApiPostResponse(
-    val status: String,
+    @SerializedName("message")
     val message: String,
+
+    @SerializedName("data")
     val data: PostData
 )
 
 data class PostData(
-    val post: PostResponse
+    @SerializedName("postId")
+    val postId: String,
+
+    @SerializedName("jenisTernak")
+    val jenisTernak: String,
+
+    @SerializedName("jenisAksi")
+    val jenisAksi: String,
+
+    @SerializedName("keterangan")
+    val keterangan: String,
+
+    @SerializedName("latitude")
+    val latitude: Double,
+
+    @SerializedName("longitude")
+    val longitude: Double,
+
+    @SerializedName("createdAt")
+    val createdAt: String,
+
+    @SerializedName("updatedAt")
+    val updatedAt: String,
+
+    @SerializedName("petugas")
+    val petugas: String,
+
+    @SerializedName("status")
+    val status: String,
 )
 
+// input for addPost
 data class PostDataClass(
-    @SerializedName("jenis_ternak") val jenisTernak: String,
-    @SerializedName("jenis_aksi") val jenisAksi: String,
+    @SerializedName("jenisTernak")
+    val jenisTernak: String,
+
+    @SerializedName("jenisAksi")
+    val jenisAksi: String,
+
+    @SerializedName("keterangan")
     val keterangan: String,
+
+    @SerializedName("latitude")
+    val latitude: Double,
+
+    @SerializedName("longitude")
+    val longitude: Double
+)
+
+// input for updatePost
+data class UpdatePostDataClass(
+    @SerializedName("jenisTernak")
+    val jenisTernak: String,
+
+    @SerializedName("jenisAksi")
+    val jenisAksi: String,
+
+    @SerializedName("keterangan")
+    val keterangan: String
+)
+
+// respons for get all posts by user id
+data class ListPostItem(
+    @SerializedName("message")
+    val message: String,
+
+    @SerializedName("status")
+    val status: String,
+
+    @SerializedName("data")
+    val data: List<PostItem>
+)
+
+data class PostItem(
+//    @SerializedName("jenisTernak")
+//    val jenisTernak: String,
+
+    @SerializedName("jenisAksi")
+    val jenisAksi: String,
+
+    @SerializedName("createdAt")
+    val createdAt: String,
+
+    @SerializedName("status")
+    val status: String,
+
+    @SerializedName("postId")
+    val postId: String
+)
+
+// response for get all posts with location
+data class ListPostLoc(
+    @SerializedName("message")
+    val message: String,
+
+    @SerializedName("status")
+    val status: String,
+
+    @SerializedName("data")
+    val data: List<PostLoc>
+)
+
+data class PostLoc(
+    @SerializedName("jenisTernak")
+    val jenisTernak: String,
+
+    @SerializedName("jenisAksi")
+    val jenisAksi: String,
+
+    @SerializedName("longitude")
     val longitude: Double,
-    val latitude: Double
+
+    @SerializedName("latitude")
+    val latitude: Double,
+)
+
+
+// response for get all posts
+data class ListAllPosts(
+    @SerializedName("message")
+    val message: String,
+
+    @SerializedName("status")
+    val status: String,
+
+    @SerializedName("data")
+    val data: List<Post>
+)
+
+@Parcelize
+data class Post(
+    @SerializedName("postId")
+    val postId: String,
+
+    @SerializedName("jenisTernak")
+    val jenisTernak: String,
+
+    @SerializedName("jenisAksi")
+    val jenisAksi: String,
+
+    @SerializedName("keterangan")
+    val keterangan: String,
+
+    @SerializedName("latitude")
+    val latitude: Double,
+
+    @SerializedName("longitude")
+    val longitude: Double,
+
+    @SerializedName("createdAt")
+    val createdAt: Date,
+
+    @SerializedName("updatedAt")
+    val updatedAt: Date,
+
+    @SerializedName("petugas")
+    val petugas: String,
+
+    @SerializedName("status")
+    val status: String,
+
+    @SerializedName("userId")
+    val userId: String
+) : Parcelable
+
+data class DeleteResponse(
+    @SerializedName("message")
+    val message: String,
+
+    @SerializedName("status")
+    val status: String,
 )

@@ -3,7 +3,9 @@ package com.example.ternakapp.ui.post.add
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.ternakapp.data.response.PostDataClass
 import com.example.ternakapp.data.response.PostResponse
+import com.example.ternakapp.data.response.UpdatePostDataClass
 import com.example.ternakapp.data.retrofit.ApiConfig
 import retrofit2.Call
 import retrofit2.Callback
@@ -42,10 +44,10 @@ class AddPostViewModel : ViewModel() {
         })
     }
 
-    fun addNewPost(jenisTernak: String, jenisAksi: String, keterangan: String, latitude: Double, longitude: Double) {
+    fun addNewPost(token: String, jenisTernak: String, jenisAksi: String, keterangan: String, latitude: Double, longitude: Double) {
         _isLoading.value = true
         val apiService = ApiConfig.getApiService()
-        val call = apiService.addPost(jenisTernak, jenisAksi, keterangan, latitude, longitude)
+        val call = apiService.addPost("Bearer $token", PostDataClass(jenisTernak, jenisAksi, keterangan, latitude, longitude))
 
         call.enqueue(object : Callback<PostResponse> {
             override fun onResponse(call: Call<PostResponse>, response: Response<PostResponse>) {
@@ -64,10 +66,10 @@ class AddPostViewModel : ViewModel() {
         })
     }
 
-    fun updatePost(postId: String, jenisTernak: String, jenisAksi: String, keterangan: String) {
+    fun updatePost(token: String, postId: String, jenisTernak: String, jenisAksi: String, keterangan: String) {
         _isLoading.value = true
         val apiService = ApiConfig.getApiService()
-        val call = apiService.updatePost(postId, jenisTernak, jenisAksi, keterangan)
+        val call = apiService.updatePost("Bearer $token", postId, UpdatePostDataClass(jenisTernak, jenisAksi, keterangan))
 
         call.enqueue(object : Callback<PostResponse> {
             override fun onResponse(call: Call<PostResponse>, response: Response<PostResponse>) {

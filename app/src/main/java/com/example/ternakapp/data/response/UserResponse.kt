@@ -22,20 +22,3 @@ data class UserResponse(
     val kecamatan: String,
     val alamat: String,
 ) : Parcelable
-
-data class RegisterDataClass(
-    @field:SerializedName("no_telp")
-    val noTelp: String,
-    val password: String,
-    val nama: String,
-    val provinsi: String,
-    val kota: String,
-    val kecamatan: String,
-    val alamat: String
-)
-
-data class LoginDataClass(
-    @field:SerializedName("no_telp")
-    val noTelp: String,
-    val password: String
-)

@@ -7,14 +7,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.ternakapp.data.response.PostItem
 import com.example.ternakapp.data.response.PostResponse
 import com.example.ternakapp.databinding.ItemPostBinding
 import com.example.ternakapp.ui.post.detail.PostDetailActivity
 
 class PostAdapter(
     private val context: Context,
-    private var post: PostResponse?,
-    private val onItemClick: (PostResponse) -> Unit
+    private var post: PostItem?,
+    private val onItemClick: (PostItem) -> Unit
 ) : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
 
     inner class PostViewHolder(private val binding: ItemPostBinding) : RecyclerView.ViewHolder(binding.root), View.OnClickListener {
@@ -22,7 +23,7 @@ class PostAdapter(
             binding.root.setOnClickListener(this)
         }
 
-        fun bind(post: PostResponse) {
+        fun bind(post: PostItem) {
             binding.jenisAksiTv.text = post.jenisAksi
             binding.createdDateTv.text = post.createdAt
             binding.statusTv.text = post.status
@@ -49,7 +50,7 @@ class PostAdapter(
     override fun getItemCount(): Int = if (post == null) 0 else 1
 
     @SuppressLint("NotifyDataSetChanged")
-    fun updatePost(newPost: PostResponse) {
+    fun updatePost(newPost: PostItem) {
         post = newPost
         notifyDataSetChanged()
     }

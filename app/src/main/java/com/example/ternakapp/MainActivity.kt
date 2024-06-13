@@ -8,6 +8,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.example.ternakapp.data.local.AuthPreference
 import com.example.ternakapp.databinding.ActivityMainBinding
 import com.example.ternakapp.ui.home.HomeFragment
 import com.example.ternakapp.ui.login.LoginActivity
@@ -23,10 +24,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // cek status login
-        val sharedPref = getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
-        val isLoggedIn = sharedPref.getBoolean("is_logged_in", false)
+        val authPreference = AuthPreference(this)
+        val token = authPreference.getToken()
 
-        if (!isLoggedIn) {
+        if (token.isNullOrEmpty()) {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
             finish()

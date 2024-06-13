@@ -9,6 +9,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import com.example.ternakapp.data.local.AuthPreference
 import com.example.ternakapp.databinding.ActivityAddPostBinding
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -42,9 +43,9 @@ class AddPostActivity : AppCompatActivity() {
         }
         viewModel.post.observe(this) { post ->
             post?.let {
-                binding.edJenisTernakLayout.editText?.setText(it.jenisTernak)
-                binding.edJenisAksiLayout.editText?.setText(it.jenisAksi)
-                binding.edKeterangan.editText?.setText(it.keterangan)
+                binding.edJenisTernakLayout.editText?.setText(it.data.jenisTernak)
+                binding.edJenisAksiLayout.editText?.setText(it.data.jenisAksi)
+                binding.edKeterangan.editText?.setText(it.data.keterangan)
             }
         }
 
@@ -79,23 +80,25 @@ class AddPostActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            fusedLocationClient.lastLocation
-                .addOnSuccessListener { location ->
+            fusedLocationClient.lastLocation.addOnSuccessListener { location ->
                     location?.let {
                         val latitude = it.latitude
                         val longitude = it.longitude
+                        val authPreference = AuthPreference(this)
+                        val token = authPreference.getToken()
 
-                        if (postId != null) {
-                            viewModel.updatePost(postId!!, jenisTernak, jenisAksi, keterangan)
+                        if (token != null) {
+                            if (postId != null) {
+                                viewModel.updatePost(token, postId!!, jenisTernak, jenisAksi, keterangan)
+                            } else {
+                                viewModel.addNewPost(token, jenisTernak, jenisAksi, keterangan, latitude, longitude)
+                            }
                         } else {
-                            viewModel.addNewPost(jenisTernak, jenisAksi, keterangan, latitude, longitude)
+                            Toast.makeText(this, "Gagal mendapatkan lokasi", Toast.LENGTH_SHORT).show()
                         }
-                    } ?: run {
-                        Toast.makeText(this, "Gagal mendapatkan lokasi", Toast.LENGTH_SHORT).show()
                     }
-                }
+            }
         }
-
         supportActionBar?.hide()
     }
     private fun requestLocationPermission() {

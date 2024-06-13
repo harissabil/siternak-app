@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.ternakapp.data.response.ApiResponse
 import com.example.ternakapp.data.response.RegisterDataClass
+import com.example.ternakapp.data.response.RegisterResponse
 import com.example.ternakapp.data.retrofit.ApiConfig
 import retrofit2.Call
 import retrofit2.Callback
@@ -34,8 +35,8 @@ class RegisterViewModel : ViewModel() {
         val apiService = ApiConfig.getApiService()
         val call = apiService.registerUser(RegisterDataClass(noTelp, password, nama, provinsi, kota, kecamatan, alamat))
 
-        call.enqueue(object : Callback<ApiResponse> {
-            override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
+        call.enqueue(object : Callback<RegisterResponse> {
+            override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
                 _isLoading.value = false
                 if (response.isSuccessful && response.body()?.status == "success") {
                     _message.value = "Registrasi berhasil"
@@ -46,7 +47,7 @@ class RegisterViewModel : ViewModel() {
                 }
             }
 
-            override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
+            override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
                 _isLoading.value = false
                 _message.value = "Gagal: ${t.message}"
                 _isRegisterSuccess.value = false

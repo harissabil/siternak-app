@@ -57,9 +57,9 @@ class HomeFragment : Fragment() {
         marker.title = "Lokasi Anda"
         binding.map.overlays.add(marker)
 
-        homeViewModel.posts.observe(viewLifecycleOwner, Observer { posts ->
-            posts?.let { updateMapWithPosts(it) }
-        })
+//        homeViewModel.posts.observe(viewLifecycleOwner, Observer { posts ->
+//            posts?.let { updateMapWithPosts(it) }
+//        })
 
         homeViewModel.isLoading.observe(viewLifecycleOwner, Observer { isLoading ->
             binding.progressBar.visibility = if (isLoading) {
@@ -72,16 +72,16 @@ class HomeFragment : Fragment() {
         homeViewModel.getAllPostsWithLoc()
     }
 
-    private fun updateMapWithPosts(posts: List<PostResponse>) {
-        for (post in posts) {
-            val geoPoint = GeoPoint(post.latitude ?: 0.0, post.longitude ?: 0.0)
-            val marker = Marker(binding.map)
-            marker.position = geoPoint
-            marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
-            marker.title = post.jenisTernak
-            binding.map.overlays.add(marker)
-        }
-    }
+//    private fun updateMapWithPosts(posts: List<PostResponse>) {
+//        for (post in posts) {
+//            val geoPoint = GeoPoint(post.latitude ?: 0.0, post.longitude ?: 0.0)
+//            val marker = Marker(binding.map)
+//            marker.position = geoPoint
+//            marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
+//            marker.title = post.jenisTernak
+//            binding.map.overlays.add(marker)
+//        }
+//    }
 
     override fun onResume() {
         super.onResume()
