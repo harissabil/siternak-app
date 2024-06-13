@@ -3,7 +3,6 @@ package com.example.ternakapp.ui.register
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.ternakapp.data.response.ApiResponse
 import com.example.ternakapp.data.response.RegisterDataClass
 import com.example.ternakapp.data.response.RegisterResponse
 import com.example.ternakapp.data.retrofit.ApiConfig

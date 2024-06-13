@@ -1,10 +1,8 @@
 package com.example.ternakapp.data.response
 
 import android.os.Parcelable
-import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
-import retrofit2.http.Field
 import java.util.Date
 
 // response for addPost
@@ -63,22 +61,10 @@ data class PostDataClass(
     val keterangan: String,
 
     @SerializedName("latitude")
-    val latitude: Double,
+    val latitude: String,
 
     @SerializedName("longitude")
-    val longitude: Double
-)
-
-// input for updatePost
-data class UpdatePostDataClass(
-    @SerializedName("jenisTernak")
-    val jenisTernak: String,
-
-    @SerializedName("jenisAksi")
-    val jenisAksi: String,
-
-    @SerializedName("keterangan")
-    val keterangan: String
+    val longitude: String
 )
 
 // respons for get all posts by user id
@@ -90,13 +76,15 @@ data class ListPostItem(
     val status: String,
 
     @SerializedName("data")
-    val data: List<PostItem>
+    val data: PostsData
+)
+
+data class PostsData(
+    @SerializedName("posts")
+    val posts: List<PostItem>
 )
 
 data class PostItem(
-//    @SerializedName("jenisTernak")
-//    val jenisTernak: String,
-
     @SerializedName("jenisAksi")
     val jenisAksi: String,
 
@@ -136,19 +124,6 @@ data class PostLoc(
     val latitude: Double,
 )
 
-
-// response for get all posts
-data class ListAllPosts(
-    @SerializedName("message")
-    val message: String,
-
-    @SerializedName("status")
-    val status: String,
-
-    @SerializedName("data")
-    val data: List<Post>
-)
-
 @Parcelize
 data class Post(
     @SerializedName("postId")
@@ -185,6 +160,19 @@ data class Post(
     val userId: String
 ) : Parcelable
 
+// input for updatePost
+data class UpdatePostDataClass(
+    @SerializedName("jenisTernak")
+    val jenisTernak: String,
+
+    @SerializedName("jenisAksi")
+    val jenisAksi: String,
+
+    @SerializedName("keterangan")
+    val keterangan: String
+)
+
+//response for delete post
 data class DeleteResponse(
     @SerializedName("message")
     val message: String,

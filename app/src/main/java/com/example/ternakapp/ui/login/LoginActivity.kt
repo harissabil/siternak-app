@@ -1,11 +1,12 @@
 package com.example.ternakapp.ui.login
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import com.example.ternakapp.MainActivity
 import com.example.ternakapp.data.local.AuthPreference
 import com.example.ternakapp.databinding.ActivityLoginBinding
@@ -22,7 +23,6 @@ class LoginActivity : AppCompatActivity() {
 
         supportActionBar?.hide()
 
-        // check are fields empty
         binding.loginButton.setOnClickListener {
             val noTelp = binding.loginEditPhone.text.toString()
             val password = binding.loginEditPassword.text.toString()
@@ -33,38 +33,40 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-        // go to register activity
         binding.toRegister.setOnClickListener{
             val intent = Intent(this@LoginActivity, RegisterActivity::class.java)
             startActivity(intent)
         }
 
-        viewModel.isLoading.observe(this, Observer { isLoading ->
-            binding.progressBar.visibility = if (isLoading) {
-                android.view.View.VISIBLE
-            } else {
-                android.view.View.GONE
-            }
-        })
+        viewModel.isLoading.observe(this) { isLoading ->
+            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        }
 
-        viewModel.message.observe(this, Observer { message ->
+        viewModel.message.observe(this) { message ->
             message?.let {
-                Toast.makeText(this, message ?: "Error", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
             }
-        })
+        }
 
-        viewModel.loginResponse.observe(this, Observer { loginResponse ->
+        viewModel.loginResponse.observe(this) { loginResponse ->
             loginResponse?.let {
                 val authPreference = AuthPreference(this)
-                authPreference.setToken(loginResponse.loginResult.token)
-                navigateToMainActivity()
+                authPreference.setToken(it.loginResult.token)
 
+                val preferences = getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
+                with(preferences.edit()) {
+                    putString("user_name", it.loginResult.nama)
+                    apply()
+                }
+
+                navigateToMainActivity()
             }
-        })
+        }
     }
 
     private fun navigateToMainActivity() {
         val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
         finish()
     }

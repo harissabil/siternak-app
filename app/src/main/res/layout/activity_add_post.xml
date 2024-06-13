@@ -66,12 +66,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="Jenis Aksi"
+        android:text="Jenis Laporan"
         android:textSize="16sp"
         android:textStyle="bold"
         android:textColor="@color/title_black"
         app:layout_constraintTop_toBottomOf="@+id/ed_jenis_ternak_layout"
         tools:layout_editor_absoluteX="20dp" />
+
+    <TextView
+        android:id="@+id/tv_jenis_aksi_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:text="Jenis laporan berupa Laporan Penyakit/Permintaan Vaksin"
+        android:textSize="12sp"
+        android:textColor="@color/title_black"
+        app:layout_constraintTop_toBottomOf="@+id/tv_jenis_aksi"/>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/ed_jenis_aksi_layout"
@@ -82,13 +92,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_jenis_aksi">
+        app:layout_constraintTop_toBottomOf="@+id/tv_jenis_aksi_desc">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:ems="20"
-            android:hint="Masukkan jenis aksi"
+            android:hint="Masukkan jenis laporan"
             android:importantForAutofill="no"
             android:inputType="textEmailAddress"
             android:drawablePadding="5dp"

@@ -3,7 +3,6 @@ package com.example.ternakapp.ui.post.detail
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.room.Delete
 import com.example.ternakapp.data.response.DeleteResponse
 import com.example.ternakapp.data.response.PostResponse
 import com.example.ternakapp.data.retrofit.ApiConfig
@@ -22,10 +21,10 @@ class PostDetailViewModel : ViewModel() {
     private val _message = MutableLiveData<String?>()
     val message: LiveData<String?> = _message
 
-    fun loadPostDetails(postId: String) {
+    fun loadPostDetails(token: String, postId: String) {
         _isLoading.value = true
         val apiService = ApiConfig.getApiService()
-        val call = apiService.getPostById(postId)
+        val call = apiService.getPostById("Bearer $token", postId)
 
         call.enqueue(object : Callback<PostResponse> {
             override fun onResponse(call: Call<PostResponse>, response: Response<PostResponse>) {

@@ -1,17 +1,16 @@
 package com.example.ternakapp.ui.profile
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
-import com.example.ternakapp.data.local.AuthPreference
+import com.bumptech.glide.Glide
 import com.example.ternakapp.databinding.FragmentProfileBinding
-import com.example.ternakapp.ui.home.HomeViewModel
-import com.example.ternakapp.ui.login.LoginActivity
+import com.example.ternakapp.utils.NavigationUtils
 
 class ProfileFragment : Fragment() {
 
@@ -19,35 +18,42 @@ class ProfileFragment : Fragment() {
     private val binding get() = _binding!!
     private val profileViewModel: ProfileViewModel by viewModels()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-        return root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        (activity as? AppCompatActivity)?.supportActionBar?.hide()
+
+        Glide.with(this)
+            .load("https://i2.wp.com/zubnylekarpodolsky.sk/wp-content/uploads/2013/06/blank_profile.png")
+            .circleCrop()
+            .into(binding.ivPengguna)
+
         profileViewModel.loadUserName(requireContext())
-        profileViewModel.userName.observe(viewLifecycleOwner, Observer { userName ->
+        profileViewModel.userName.observe(viewLifecycleOwner) { userName ->
             binding.tvNamaPengguna.text = userName
-        })
+        }
+
+        binding.tvDataPengguna.setOnClickListener {
+            Toast.makeText(requireContext(), "Fitur belum tersedia", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.tvAturSandi.setOnClickListener {
+            Toast.makeText(requireContext(), "Fitur belum tersedia", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.tvBantuan.setOnClickListener {
+            Toast.makeText(requireContext(), "Fitur belum tersedia", Toast.LENGTH_SHORT).show()
+        }
 
         binding.btnLogout.setOnClickListener {
             profileViewModel.logoutUser(requireContext())
-            navigateToLogin()
+            NavigationUtils.navigateToLogin(requireContext())
         }
-    }
-
-    private fun navigateToLogin() {
-        val intent = Intent(requireContext(), LoginActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        startActivity(intent)
-        requireActivity().finish()
     }
 
     override fun onDestroyView() {

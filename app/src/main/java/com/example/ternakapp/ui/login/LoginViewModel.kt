@@ -1,10 +1,8 @@
 package com.example.ternakapp.ui.login
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.ternakapp.data.response.ApiResponse
 import com.example.ternakapp.data.response.LoginDataClass
 import com.example.ternakapp.data.response.LoginResponse
 import com.example.ternakapp.data.retrofit.ApiConfig

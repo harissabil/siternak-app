@@ -24,14 +24,17 @@ interface ApiService {
     @GET("api/v1/post/myposts")
     fun getAllPostsByUserId(
         @Header("Authorization") token: String
-    ): Call<PostItem>
+    ): Call<ListPostItem>
 
     @GET("api/v1/post/")
-    fun getAllPosts(): Call<List<Post>>
+    fun getAllPosts(
+        @Header("Authorization") token: String
+    ): Call<ListPostLoc>
 
     @GET("api/v1/post/{id}")
     fun getPostById(
-        postId: String
+        @Header("Authorization") token: String,
+        @Path("id") id: String
     ): Call<PostResponse>
 
     @PUT("api/v1/post/{id}")

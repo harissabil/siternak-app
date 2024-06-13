@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.ternakapp.data.response.ListPostItem
-import com.example.ternakapp.data.response.Post
 import com.example.ternakapp.data.response.PostItem
 import com.example.ternakapp.data.retrofit.ApiConfig
 import retrofit2.Call
@@ -12,8 +11,8 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class PostViewModel : ViewModel() {
-    private val _posts = MutableLiveData<PostItem>()
-    val posts: LiveData<PostItem> = _posts
+    private val _posts = MutableLiveData<List<PostItem>>()
+    val posts: LiveData<List<PostItem>> = _posts
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -26,12 +25,15 @@ class PostViewModel : ViewModel() {
         val apiService = ApiConfig.getApiService()
         val call = apiService.getAllPostsByUserId("Bearer $token")
 
-        call.enqueue(object : Callback<PostItem> {
-            override fun onResponse(call: Call<PostItem>, response: Response<PostItem>) {
+        call.enqueue(object : Callback<ListPostItem> {
+            override fun onResponse(call: Call<ListPostItem>, response: Response<ListPostItem>) {
                 _isLoading.value = false
                 if (response.isSuccessful) {
                     response.body()?.let {
-                        _posts.value = response.body()
+                        //_posts.value = it.data.posts
+                        // Urutkan post berdasarkan createdAt dalam urutan menurun
+                        val sortedPosts = it.data.posts.sortedByDescending { post -> post.createdAt }
+                        _posts.value = sortedPosts
                     } ?: run {
                         _message.value = "Belum ada data"
                     }
@@ -40,10 +42,14 @@ class PostViewModel : ViewModel() {
                 }
             }
 
-            override fun onFailure(call: Call<PostItem>, t: Throwable) {
+            override fun onFailure(call: Call<ListPostItem>, t: Throwable) {
                 _isLoading.value = false
                 _message.value = "Gagal memuat data: ${t.message}"
             }
         })
+    }
+    // reload data setelah penghapusan
+    fun reloadPosts(token: String) {
+        loadPosts(token)
     }
 }

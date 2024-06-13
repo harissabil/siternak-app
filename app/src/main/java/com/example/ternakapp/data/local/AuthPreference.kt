@@ -1,7 +1,6 @@
 package com.example.ternakapp.data.local
 
 import android.content.Context
-import com.example.ternakapp.ui.login.LoginActivity
 
 class AuthPreference(context: Context) {
     companion object {

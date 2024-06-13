@@ -2,22 +2,14 @@ package com.example.ternakapp.ui.post.detail
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import com.example.ternakapp.data.local.AuthPreference
-import com.example.ternakapp.data.response.PostResponse
-import com.example.ternakapp.data.retrofit.ApiConfig
-import com.example.ternakapp.databinding.ActivityAddPostBinding
 import com.example.ternakapp.databinding.ActivityDetailPostBinding
 import com.example.ternakapp.ui.post.add.AddPostActivity
-import okhttp3.ResponseBody
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.example.ternakapp.utils.DateUtils
 
 class PostDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailPostBinding
@@ -31,49 +23,48 @@ class PostDetailActivity : AppCompatActivity() {
 
         postId = intent.getStringExtra("POST_ID")
 
-        if (postId != null) {
-            viewModel.loadPostDetails(postId!!)
+        val authPreference = AuthPreference(this)
+        val token = authPreference.getToken()
+
+        if (token != null && postId != null) {
+            viewModel.loadPostDetails(token, postId!!)
         }
 
-        viewModel.post.observe(this, Observer { post ->
+        viewModel.post.observe(this) { post ->
             post?.let {
-                binding.edPostId.text = it.data.postId
                 binding.edPetugas.text = it.data.petugas
                 binding.edJenisTernak.text = it.data.jenisTernak
                 binding.edJenisAksi.text = it.data.jenisAksi
-                binding.tvPostTanggal.text = it.data.createdAt
-                binding.tvActionKeterangan.text = it.data.keterangan
-                binding.tvActionStatus.text = it.data.status
+                binding.edTanggal.text = DateUtils.formatDate(it.data.createdAt)
+                binding.edKeterangan.text = it.data.keterangan
+                binding.edStatus.text = it.data.status
             }
-        })
+        }
 
-        viewModel.isLoading.observe(this, Observer { isLoading ->
+        viewModel.isLoading.observe(this) { isLoading ->
             binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-        })
+        }
 
-        viewModel.message.observe(this, Observer { message ->
+        viewModel.message.observe(this) { message ->
             message?.let {
                 Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
                 if (it == "Post berhasil dihapus") {
+                    // auto reload data
+                    val reloadIntent = Intent().apply {
+                        putExtra("NEEDS_RELOAD", true)
+                    }
+                    setResult(RESULT_OK, reloadIntent)
                     finish()
                 }
             }
-        })
+        }
 
         binding.btnBack.setOnClickListener {
             finish()
         }
 
         binding.btnDelete.setOnClickListener {
-            postId?.let { id ->
-                val authPreference = AuthPreference(this)
-                val token = authPreference.getToken()
-                if (token != null) {
-                    viewModel.deletePost(token, id)
-                } else {
-                    Toast.makeText(this, "Token tidak ditemukan. Silakan login kembali.", Toast.LENGTH_SHORT).show()
-                }
-            }
+            postId?.let { id -> viewModel.deletePost(token!!, id) }
         }
 
         binding.btnEdit.setOnClickListener {
@@ -81,7 +72,6 @@ class PostDetailActivity : AppCompatActivity() {
             intent.putExtra("POST_ID", postId)
             startActivity(intent)
         }
-
-        supportActionBar?.title = "Detail Post"
+        supportActionBar?.hide()
     }
 }

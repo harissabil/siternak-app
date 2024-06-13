@@ -7,7 +7,7 @@
     tools:context=".ui.profile.ProfileFragment">
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/iv_pengguna"
         android:layout_width="63dp"
         android:layout_height="63dp"
         android:layout_marginStart="20dp"
@@ -25,9 +25,9 @@
         android:text="Adi Ramadhan"
         android:textStyle="bold"
         android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView2"
-        app:layout_constraintStart_toEndOf="@id/imageView2"
-        app:layout_constraintTop_toTopOf="@+id/imageView2"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_pengguna"
+        app:layout_constraintStart_toEndOf="@id/iv_pengguna"
+        app:layout_constraintTop_toTopOf="@+id/iv_pengguna"
         tools:ignore="MissingConstraints" />
 
     <View
@@ -36,16 +36,16 @@
         android:layout_height="5dp"
         android:layout_marginTop="20dp"
         android:background="@color/cream"
-        app:layout_constraintTop_toBottomOf="@id/imageView2"/>
+        app:layout_constraintTop_toBottomOf="@id/iv_pengguna"/>
 
     <TextView
-        android:id="@+id/data_pengguna"
+        android:id="@+id/tv_data_pengguna"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:layout_marginVertical="20dp"
-        android:text="   Data Pengguna"
-        android:textSize="14sp"
+        android:text="     Data Pengguna"
+        android:textSize="18sp"
         app:drawableStartCompat="@drawable/icon_change_profile_fill"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -60,16 +60,16 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:background="@color/greyish"
-        app:layout_constraintTop_toBottomOf="@id/data_pengguna"/>
+        app:layout_constraintTop_toBottomOf="@id/tv_data_pengguna"/>
 
     <TextView
-        android:id="@+id/atur_kata_sandi"
+        android:id="@+id/tv_atur_sandi"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:layout_marginVertical="20dp"
-        android:text="  Atur Kata Sandi"
-        android:textSize="14sp"
+        android:text="    Atur Kata Sandi"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/view1"
         app:drawableStartCompat="@drawable/baseline_password_24"
@@ -83,16 +83,16 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:background="@color/greyish"
-        app:layout_constraintTop_toBottomOf="@id/atur_kata_sandi"/>
+        app:layout_constraintTop_toBottomOf="@id/tv_atur_sandi"/>
 
     <TextView
-        android:id="@+id/bantuan"
+        android:id="@+id/tv_bantuan"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:layout_marginVertical="20dp"
-        android:text="   Bantuan"
-        android:textSize="14sp"
+        android:text="     Bantuan"
+        android:textSize="18sp"
         app:drawableStartCompat="@drawable/baseline_help_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -110,7 +110,7 @@
         android:textSize="18sp"
         android:textStyle="bold"
         android:textAllCaps="false"
-        app:layout_constraintTop_toBottomOf="@id/bantuan"
+        app:layout_constraintTop_toBottomOf="@id/tv_bantuan"
         tools:ignore="MissingConstraints" />
 
     <ProgressBar

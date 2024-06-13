@@ -1,26 +1,27 @@
 package com.example.ternakapp.ui.post
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.ternakapp.adapter.PostAdapter
 import com.example.ternakapp.data.local.AuthPreference
 import com.example.ternakapp.databinding.FragmentPostBinding
-import com.example.ternakapp.ui.login.LoginActivity
 import com.example.ternakapp.ui.post.add.AddPostActivity
 import com.example.ternakapp.ui.post.detail.PostDetailActivity
+import com.example.ternakapp.utils.NavigationUtils
 
 class PostFragment : Fragment() {
 
+    private lateinit var postDetailLauncher: ActivityResultLauncher<Intent>
     private var _binding: FragmentPostBinding? = null
     private val viewModel: PostViewModel by viewModels()
     private val binding get() = _binding!!
@@ -31,22 +32,33 @@ class PostFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPostBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-        return root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        (activity as? AppCompatActivity)?.supportActionBar?.hide()
+
+        postDetailLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == AppCompatActivity.RESULT_OK) {
+                val authPreference = AuthPreference(requireContext())
+                val token = authPreference.getToken()
+                if (token != null && result.data?.getBooleanExtra("NEEDS_RELOAD", false) == true) {
+                    viewModel.reloadPosts(token)
+                }
+            }
+        }
+
         val authPreference = AuthPreference(requireContext())
         val token = authPreference.getToken()
 
         if (token.isNullOrEmpty()) {
-            navigateToLogin()
+            NavigationUtils.navigateToLogin(requireContext())
             return
         }
 
-        val adapter = PostAdapter(requireContext(), null) { post ->
+        val adapter = PostAdapter(requireContext(), emptyList()) { post ->
             val intent = Intent(requireContext(), PostDetailActivity::class.java).apply {
                 putExtra("POST_ID", post.postId)
             }
@@ -61,34 +73,28 @@ class PostFragment : Fragment() {
             startActivity(intent)
         }
 
-        viewModel.posts.observe(viewLifecycleOwner, Observer { post ->
-            if (post != null) {
-                binding.rvStory.visibility = View.GONE
-                binding.tvNoPosts.visibility = View.VISIBLE
-            } else {
+        viewModel.posts.observe(viewLifecycleOwner) { posts ->
+            if (posts.isNotEmpty()) {
                 binding.rvStory.visibility = View.VISIBLE
                 binding.tvNoPosts.visibility = View.GONE
+                adapter.updatePosts(posts)
+            } else {
+                binding.rvStory.visibility = View.GONE
+                binding.tvNoPosts.visibility = View.VISIBLE
             }
-        })
+        }
 
-        viewModel.isLoading.observe(viewLifecycleOwner, Observer { isLoading ->
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-        })
+        }
 
-        viewModel.message.observe(viewLifecycleOwner, Observer { message ->
+        viewModel.message.observe(viewLifecycleOwner) { message ->
             message?.let {
                 Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
             }
-        })
+        }
 
         viewModel.loadPosts(token)
-    }
-
-    private fun navigateToLogin() {
-        val intent = Intent(requireContext(), LoginActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        startActivity(intent)
-        requireActivity().finish()
     }
 
     override fun onDestroyView() {

@@ -22,7 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:textSize="14sp"
+            android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="@color/black"
             android:text="Pelaporan Penyakit"
@@ -41,13 +41,18 @@
             card_view:layout_constraintBottom_toBottomOf="parent"
             tools:ignore="MissingConstraints"/>
 
-        <Button
+        <TextView
             android:id="@+id/status_tv"
             android:layout_width="wrap_content"
-            android:layout_height="24dp"
-            android:layout_margin="10dp"
+            android:layout_height="36dp"
+            android:layout_margin="7dp"
             android:text="Status"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:gravity="center"
             android:background="@drawable/status_ongoing"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="8dp"
             card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintEnd_toEndOf="parent" />
 

@@ -1,5 +1,6 @@
 package com.example.ternakapp.ui.post.add
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -22,10 +23,10 @@ class AddPostViewModel : ViewModel() {
     private val _message = MutableLiveData<String?>()
     val message: LiveData<String?> = _message
 
-    fun loadPostDetails(postId: String) {
+    fun loadPostDetails(token: String, postId: String) {
         _isLoading.value = true
         val apiService = ApiConfig.getApiService()
-        val call = apiService.getPostById(postId)
+        val call = apiService.getPostById("Bearer $token", postId)
 
         call.enqueue(object : Callback<PostResponse> {
             override fun onResponse(call: Call<PostResponse>, response: Response<PostResponse>) {
@@ -44,9 +45,14 @@ class AddPostViewModel : ViewModel() {
         })
     }
 
-    fun addNewPost(token: String, jenisTernak: String, jenisAksi: String, keterangan: String, latitude: Double, longitude: Double) {
+    fun addNewPost(token: String, jenisTernak: String, jenisAksi: String, keterangan: String, latitude: String, longitude: String) {
         _isLoading.value = true
         val apiService = ApiConfig.getApiService()
+
+        // Logging data
+        val postData = PostDataClass(jenisTernak, jenisAksi, keterangan, latitude, longitude)
+        Log.d("AddPostViewModel", "addNewPost: $postData")
+
         val call = apiService.addPost("Bearer $token", PostDataClass(jenisTernak, jenisAksi, keterangan, latitude, longitude))
 
         call.enqueue(object : Callback<PostResponse> {

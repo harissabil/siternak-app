@@ -38,9 +38,14 @@ class AddPostActivity : AppCompatActivity() {
         }
 
         postId = intent.getStringExtra("POST_ID")
-        if (postId != null) {
-            viewModel.loadPostDetails(postId!!)
+
+        val authPreference = AuthPreference(this)
+        val token = authPreference.getToken()
+
+        if (token !== null && postId != null) {
+            viewModel.loadPostDetails(token, postId!!)
         }
+
         viewModel.post.observe(this) { post ->
             post?.let {
                 binding.edJenisTernakLayout.editText?.setText(it.data.jenisTernak)
@@ -56,6 +61,9 @@ class AddPostActivity : AppCompatActivity() {
         viewModel.message.observe(this) { message ->
             message?.let {
                 Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+                if (it == "Data berhasil ditambahkan" || it == "Data berhasil diperbarui") {
+                    finish()
+                }
             }
         }
 
@@ -82,10 +90,8 @@ class AddPostActivity : AppCompatActivity() {
 
             fusedLocationClient.lastLocation.addOnSuccessListener { location ->
                     location?.let {
-                        val latitude = it.latitude
-                        val longitude = it.longitude
-                        val authPreference = AuthPreference(this)
-                        val token = authPreference.getToken()
+                        val latitude = it.latitude.toString()
+                        val longitude = it.longitude.toString()
 
                         if (token != null) {
                             if (postId != null) {
@@ -101,6 +107,7 @@ class AddPostActivity : AppCompatActivity() {
         }
         supportActionBar?.hide()
     }
+
     private fun requestLocationPermission() {
         requestPermissionLauncher.launch(android.Manifest.permission.ACCESS_FINE_LOCATION)
     }

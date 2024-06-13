@@ -1,6 +1,5 @@
 package com.example.ternakapp
 
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -10,7 +9,6 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.ternakapp.data.local.AuthPreference
 import com.example.ternakapp.databinding.ActivityMainBinding
-import com.example.ternakapp.ui.home.HomeFragment
 import com.example.ternakapp.ui.login.LoginActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -23,7 +21,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // cek status login
         val authPreference = AuthPreference(this)
         val token = authPreference.getToken()
 
