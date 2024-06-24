@@ -8,6 +8,7 @@ import com.example.ternakapp.data.response.PostDataClass
 import com.example.ternakapp.data.response.PostResponse
 import com.example.ternakapp.data.response.UpdatePostDataClass
 import com.example.ternakapp.data.retrofit.ApiConfig
+import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -61,7 +62,17 @@ class AddPostViewModel : ViewModel() {
                 if (response.isSuccessful) {
                     _message.value = "Data berhasil ditambahkan"
                 } else {
-                    _message.value = "Gagal menambahkan data: ${response.errorBody()?.string()}"
+                    response.errorBody()?.let { errorBody ->
+                        try {
+                            val errorResponse = Gson().fromJson(errorBody.string(), PostResponse::class.java)
+                            _message.value = "Gagal menambahkan data: ${errorResponse.message}"
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                            _message.value = "Gagal menambahkan data"
+                        }
+                    } ?: run {
+                        _message.value = "Gagal menambahkan data"
+                    }
                 }
             }
 

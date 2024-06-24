@@ -118,7 +118,7 @@ class HomeFragment : Fragment() {
             val marker = Marker(binding.map)
             marker.position = geoPoint
             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
-            marker.title = post.jenisAksi
+            marker.title = "${post.jenisAksi}\nJenis ternak: ${post.jenisTernak}\nStatus: ${post.status}"
             binding.map.overlays.add(marker)
         }
         binding.map.invalidate() // refresh map to show markers

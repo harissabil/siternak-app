@@ -122,6 +122,9 @@ data class PostLoc(
 
     @SerializedName("latitude")
     val latitude: Double,
+
+    @SerializedName("status")
+    val status: String
 )
 
 @Parcelize

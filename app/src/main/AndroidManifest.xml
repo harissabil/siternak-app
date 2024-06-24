@@ -39,6 +39,8 @@
             android:exported="false" />
         <activity android:name=".ui.profile.ProfileFragment"
             android:exported="false" />
+        <activity android:name=".ui.profile.detail.ProfileDetailActivity"
+            android:exported="false" />
 
         <meta-data android:name="org.osmdroid.config"
             android:value="org.osmdroid.config.Configuration" />

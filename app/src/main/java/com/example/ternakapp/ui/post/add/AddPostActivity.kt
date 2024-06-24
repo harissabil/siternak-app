@@ -1,8 +1,12 @@
 package com.example.ternakapp.ui.post.add
 
+import android.Manifest
+//noinspection SuspiciousImport
+import android.R
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -48,9 +52,9 @@ class AddPostActivity : AppCompatActivity() {
 
         viewModel.post.observe(this) { post ->
             post?.let {
-                binding.edJenisTernakLayout.editText?.setText(it.data.jenisTernak)
-                binding.edJenisAksiLayout.editText?.setText(it.data.jenisAksi)
-                binding.edKeterangan.editText?.setText(it.data.keterangan)
+                binding.autoCompleteTextViewJenisTernak.setText(it.data.jenisTernak, false)
+                binding.autoCompleteTextViewJenisAksi.setText(it.data.jenisAksi, false)
+                binding.keteranganLayout.editText?.setText(it.data.keterangan)
             }
         }
 
@@ -72,16 +76,16 @@ class AddPostActivity : AppCompatActivity() {
         }
 
         binding.btnSend.setOnClickListener{
-            val jenisTernak = binding.edJenisTernakLayout.editText?.text.toString().trim()
-            val jenisAksi = binding.edJenisAksiLayout.editText?.text.toString().trim()
-            val keterangan = binding.edKeterangan.editText?.text.toString().trim()
+            val jenisTernak = binding.autoCompleteTextViewJenisTernak.text.toString().trim()
+            val jenisAksi = binding.autoCompleteTextViewJenisAksi.text.toString().trim()
+            val keterangan = binding.keteranganLayout.editText?.text.toString().trim()
 
             if (ActivityCompat.checkSelfPermission(
                     this,
-                    android.Manifest.permission.ACCESS_FINE_LOCATION
+                    Manifest.permission.ACCESS_FINE_LOCATION
                 ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
                     this,
-                    android.Manifest.permission.ACCESS_COARSE_LOCATION
+                    Manifest.permission.ACCESS_COARSE_LOCATION
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
                 requestLocationPermission()
@@ -105,10 +109,24 @@ class AddPostActivity : AppCompatActivity() {
                     }
             }
         }
+
+        initializeDropdowns()
+
         supportActionBar?.hide()
     }
 
     private fun requestLocationPermission() {
-        requestPermissionLauncher.launch(android.Manifest.permission.ACCESS_FINE_LOCATION)
+        requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+    }
+
+    private fun initializeDropdowns() {
+        val jenisTernakArray = arrayOf("Sapi", "Kambing", "Domba", "Kerbau", "Kuda", "Babi", "Ayam", "Bebek", "Lainnya" )
+        val jenisAksiArray = arrayOf("Pelaporan Penyakit", "Permintaan Vaksin")
+
+        val ternakAdapter = ArrayAdapter(this, R.layout.simple_dropdown_item_1line, jenisTernakArray)
+        binding.autoCompleteTextViewJenisTernak.setAdapter(ternakAdapter)
+
+        val aksiAdapter = ArrayAdapter(this, R.layout.simple_dropdown_item_1line, jenisAksiArray)
+        binding.autoCompleteTextViewJenisAksi.setAdapter(aksiAdapter)
     }
 }

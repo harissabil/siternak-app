@@ -11,8 +11,8 @@ android {
 
     defaultConfig {
         applicationId "com.example.ternakapp"
-        minSdk 24
-        targetSdk 33
+        minSdk 26
+        targetSdk 34
         versionCode 1
         versionName "1.0"
 
@@ -71,6 +71,7 @@ dependencies {
     implementation "androidx.room:room-ktx:2.6.1"
     implementation "androidx.room:room-paging:2.6.1"
     implementation 'androidx.preference:preference-ktx:1.2.1'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 
     //test
     testImplementation 'junit:junit:4.13.2'

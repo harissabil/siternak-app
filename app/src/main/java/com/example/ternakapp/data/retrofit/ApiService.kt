@@ -49,4 +49,9 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Path("id") id: String
     ): Call<DeleteResponse>
+
+    @GET("api/v1/users/profile")
+    fun getUserProfile(
+        @Header("Authorization") token: String
+    ): Call<UserResponse>
 }

@@ -22,9 +22,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="18dp"
-        android:text="Adi Ramadhan"
+        android:text="User Name"
         android:textStyle="bold"
-        android:textSize="24sp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/iv_pengguna"
         app:layout_constraintStart_toEndOf="@id/iv_pengguna"
         app:layout_constraintTop_toTopOf="@+id/iv_pengguna"
@@ -44,11 +44,11 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:layout_marginVertical="20dp"
-        android:text="     Data Pengguna"
-        android:textSize="18sp"
+        android:text="   Data Pengguna"
+        android:textSize="16sp"
         app:drawableStartCompat="@drawable/icon_change_profile_fill"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@drawable/icon_change_profile_fill"
         app:layout_constraintTop_toBottomOf="@id/divider_cream"
         tools:ignore="MissingConstraints" />
 
@@ -68,9 +68,9 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:layout_marginVertical="20dp"
-        android:text="    Atur Kata Sandi"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:text="   Atur Kata Sandi"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@drawable/baseline_password_24"
         app:layout_constraintTop_toBottomOf="@id/view1"
         app:drawableStartCompat="@drawable/baseline_password_24"
         tools:ignore="MissingConstraints" />
@@ -91,27 +91,46 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:layout_marginVertical="20dp"
-        android:text="     Bantuan"
-        android:textSize="18sp"
+        android:text="   Bantuan"
+        android:textSize="16sp"
         app:drawableStartCompat="@drawable/baseline_help_24"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@drawable/baseline_help_24"
         app:layout_constraintTop_toBottomOf="@id/view2"
         tools:ignore="MissingConstraints" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_logout"
-        android:layout_height="70dp"
+    <View
+        android:id="@+id/view3"
         android:layout_width="match_parent"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginTop="40dp"
-        android:text="Keluar"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:textAllCaps="false"
-        app:layout_constraintTop_toBottomOf="@id/tv_bantuan"
+        android:layout_height="1dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@color/greyish"
+        app:layout_constraintTop_toBottomOf="@id/tv_bantuan"/>
+
+    <TextView
+        android:id="@+id/btn_logout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="20dp"
+        android:text="   Keluar"
+        android:textSize="16sp"
+        android:textColor="@color/red"
+        app:drawableStartCompat="@drawable/baseline_logout_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@drawable/baseline_help_24"
+        app:layout_constraintTop_toBottomOf="@id/view3"
         tools:ignore="MissingConstraints" />
+
+    <ImageView
+        android:layout_width="350dp"
+        android:layout_height="300dp"
+        android:src="@drawable/illus_sapi"
+        android:alpha="0.3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
     <ProgressBar
         android:id="@+id/progressBar"

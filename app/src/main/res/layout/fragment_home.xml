@@ -27,8 +27,8 @@
                 android:id="@+id/tv_hello"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Halo, Adi"
-                android:textSize="22sp"
+                android:text="Halo, User"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 android:textColor="@color/black" />
 
@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="Berikut sebaran laporan oleh peternak lain di sekitarmu."
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textColor="@color/black" />
 
         </LinearLayout>

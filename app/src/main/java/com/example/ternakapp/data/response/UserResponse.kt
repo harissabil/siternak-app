@@ -4,20 +4,19 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 // insert response for user profile
-data class ApiResponse(
+data class UserResponse(
     val status: String,
     val message: String,
-    val data: UserResponse
+    val data: UserDataClass
 )
 
-@Parcelize
-data class UserResponse(
+data class UserDataClass(
     val userId: String,
-    val nama: String,
     val noTelp: String,
+    val nama: String,
     val password: String,
     val provinsi: String,
     val kota: String,
     val kecamatan: String,
     val alamat: String,
-) : Parcelable
+)

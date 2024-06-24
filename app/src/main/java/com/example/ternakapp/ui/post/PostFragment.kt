@@ -12,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.example.ternakapp.R
 import com.example.ternakapp.adapter.PostAdapter
 import com.example.ternakapp.data.local.AuthPreference
 import com.example.ternakapp.databinding.FragmentPostBinding
@@ -25,6 +27,7 @@ class PostFragment : Fragment() {
     private var _binding: FragmentPostBinding? = null
     private val viewModel: PostViewModel by viewModels()
     private val binding get() = _binding!!
+    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,6 +42,15 @@ class PostFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         (activity as? AppCompatActivity)?.supportActionBar?.hide()
+
+        swipeRefreshLayout = binding.root.findViewById(R.id.swipeRefreshLayout)
+        swipeRefreshLayout.setOnRefreshListener {
+            val authPreference = AuthPreference(requireContext())
+            val token = authPreference.getToken()
+            if (!token.isNullOrEmpty()) {
+                viewModel.reloadPosts(token)
+            }
+        }
 
         postDetailLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == AppCompatActivity.RESULT_OK) {
@@ -74,6 +86,7 @@ class PostFragment : Fragment() {
         }
 
         viewModel.posts.observe(viewLifecycleOwner) { posts ->
+            swipeRefreshLayout.isRefreshing = false
             if (posts.isNotEmpty()) {
                 binding.rvStory.visibility = View.VISIBLE
                 binding.tvNoPosts.visibility = View.GONE

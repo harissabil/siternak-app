@@ -16,13 +16,14 @@
 
     <TextView
         android:id="@+id/change_profile_tv"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
-        android:text="Tambah Aksi"
+        android:text="Laporan"
         android:textColor="@color/title_black"
         android:textSize="20sp"
         android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/btn_back"
         app:layout_constraintBottom_toBottomOf="@+id/btn_back"
         app:layout_constraintTop_toTopOf="@+id/btn_back"
         tools:layout_editor_absoluteX="20dp" />
@@ -32,7 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:text="Jenis Ternak"
+        android:text="Jenis Ternak*"
         android:textSize="16sp"
         android:textStyle="bold"
         android:textColor="@color/title_black"
@@ -40,25 +41,28 @@
         tools:layout_editor_absoluteX="20dp" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/ed_jenis_ternak_layout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="0dp"
+        android:id="@+id/jenis_ternak_layout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="5dp"
+        app:boxCornerRadiusBottomStart="8dp"
+        app:boxCornerRadiusBottomEnd="8dp"
+        app:boxCornerRadiusTopStart="8dp"
+        app:boxCornerRadiusTopEnd="8dp"
+        app:boxStrokeColor="@color/red"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_jenis_ternak">
+        app:layout_constraintTop_toBottomOf="@+id/tv_jenis_ternak"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <AutoCompleteTextView
+            android:id="@+id/autoCompleteTextViewJenisTernak"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:ems="20"
-            android:hint="Masukkan jenis ternak"
-            android:importantForAutofill="no"
-            android:inputType="textEmailAddress"
-            android:drawablePadding="5dp"
-            tools:ignore="SpeakableTextPresentCheck" />
+            android:layout_height="52dp"
+            android:inputType="none"
+            android:hint="Pilih Jenis Ternak"
+            android:focusableInTouchMode="false"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
@@ -66,11 +70,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="Jenis Laporan"
+        android:text="Jenis Laporan*"
         android:textSize="16sp"
         android:textStyle="bold"
         android:textColor="@color/title_black"
-        app:layout_constraintTop_toBottomOf="@+id/ed_jenis_ternak_layout"
+        app:layout_constraintTop_toBottomOf="@+id/jenis_ternak_layout"
         tools:layout_editor_absoluteX="20dp" />
 
     <TextView
@@ -78,31 +82,33 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="0dp"
-        android:text="Jenis laporan berupa Laporan Penyakit/Permintaan Vaksin"
         android:textSize="12sp"
         android:textColor="@color/title_black"
         app:layout_constraintTop_toBottomOf="@+id/tv_jenis_aksi"/>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/ed_jenis_aksi_layout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="0dp"
+        android:id="@+id/jenis_aksi_layout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="5dp"
+        app:boxCornerRadiusBottomStart="8dp"
+        app:boxCornerRadiusBottomEnd="8dp"
+        app:boxCornerRadiusTopStart="8dp"
+        app:boxCornerRadiusTopEnd="8dp"
+        app:boxStrokeColor="@color/red"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_jenis_aksi_desc">
+        app:layout_constraintTop_toBottomOf="@+id/tv_jenis_aksi"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <AutoCompleteTextView
+            android:id="@+id/autoCompleteTextViewJenisAksi"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:ems="20"
-            android:hint="Masukkan jenis laporan"
-            android:importantForAutofill="no"
-            android:inputType="textEmailAddress"
-            android:drawablePadding="5dp"
-            tools:ignore="SpeakableTextPresentCheck" />
+            android:layout_height="52dp"
+            android:inputType="none"
+            android:hint="Pilih Jenis Laporan"
+            android:focusableInTouchMode="false"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
@@ -114,20 +120,26 @@
         android:textColor="@color/title_black"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@+id/ed_jenis_aksi_layout"
+        app:layout_constraintTop_toBottomOf="@+id/jenis_aksi_layout"
         tools:layout_editor_absoluteX="20dp" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/ed_keterangan"
+        android:id="@+id/keterangan_layout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:boxCornerRadiusBottomStart="8dp"
+        app:boxCornerRadiusBottomEnd="8dp"
+        app:boxCornerRadiusTopStart="8dp"
+        app:boxCornerRadiusTopEnd="8dp"
+        app:boxStrokeColor="@color/red"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_keterangan">
 
         <EditText
+            android:id="@+id/ed_keterangan"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:ems="40"
@@ -136,6 +148,15 @@
             android:inputType="text"
             tools:ignore="SpeakableTextPresentCheck,TextFields" />
     </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/tv_required"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="(*) wajib diisi"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/keterangan_layout"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_send"
@@ -161,5 +182,4 @@
         app:layout_constraintTop_toTopOf="parent"
         style="?android:attr/progressBarStyle"
         tools:visibility="gone"/>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,15 +1,19 @@
 package com.example.ternakapp.ui.profile
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
+import com.example.ternakapp.R
 import com.example.ternakapp.databinding.FragmentProfileBinding
+import com.example.ternakapp.ui.profile.detail.ProfileDetailActivity
 import com.example.ternakapp.utils.NavigationUtils
 
 class ProfileFragment : Fragment() {
@@ -39,7 +43,8 @@ class ProfileFragment : Fragment() {
         }
 
         binding.tvDataPengguna.setOnClickListener {
-            Toast.makeText(requireContext(), "Fitur belum tersedia", Toast.LENGTH_SHORT).show()
+            val intent = Intent(requireContext(), ProfileDetailActivity::class.java)
+            startActivity(intent)
         }
 
         binding.tvAturSandi.setOnClickListener {
