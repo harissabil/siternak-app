@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.example.ternakapp.data.response.LoginDataClass
 import com.example.ternakapp.data.response.LoginResponse
 import com.example.ternakapp.data.retrofit.ApiConfig
+import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -28,12 +29,23 @@ class LoginViewModel(): ViewModel() {
 
         call.enqueue(object : Callback<LoginResponse> {
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
-                //Log.d("LoginViewModel", "onResponse: ${response.body()}")
                 _isLoading.value = false
                 if (response.isSuccessful) {
                     _loginResponse.value = response.body()
                 } else {
-                    _message.value = response.body()?.message ?: "Gagal login: ${response.body()?.message}"
+                    val errorBody = response.errorBody()?.string()
+                    val errorMessage = if (!errorBody.isNullOrEmpty()) {
+                        // Parse errorBody to get the message
+                        try {
+                            val errorResponse = Gson().fromJson(errorBody, LoginResponse::class.java)
+                            errorResponse.message
+                        } catch (e: Exception) {
+                            "Gagal login: ${response.message()}"
+                        }
+                    } else {
+                        "Gagal login: ${response.message()}"
+                    }
+                    _message.value = errorMessage
                 }
             }
 

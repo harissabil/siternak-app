@@ -52,5 +52,3 @@ class HomeViewModel : ViewModel() {
         })
     }
 }
-
-// tambahin bearer token!

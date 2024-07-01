@@ -251,7 +251,7 @@
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:layout_marginHorizontal="30dp"
-            android:layout_marginVertical="20dp"
+            android:layout_marginVertical="30dp"
             android:text="Daftar"
             android:textAllCaps="false"
             android:textSize="18sp"
@@ -259,35 +259,36 @@
             app:elevation="0dp"
             app:cornerRadius="10dp"
             app:layout_constraintTop_toBottomOf="@+id/ed_address_layout"
-            app:layout_constraintBottom_toBottomOf="parent"
             tools:ignore="MissingConstraints" />
 
         <TextView
-            android:id="@+id/tv_to_login"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="110dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="30dp"
-            android:text="Sudah punya akun?"
-            android:textSize="14sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/registerButton" />
+        android:id="@+id/tv_to_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="30dp"
+        android:text="Sudah punya akun?"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/registerButton"
+        app:layout_constraintHorizontal_bias="0.5" />
 
         <TextView
             android:id="@+id/to_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="110dp"
-            android:layout_marginBottom="30dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginBottom="40dp"
             android:text="Masuk"
             android:textSize="14sp"
             android:textStyle="bold"
             android:textColor="@color/red"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_to_login"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tv_to_login"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toBottomOf="@id/tv_to_login"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.5" />
 
 
         <ProgressBar

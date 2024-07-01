@@ -18,6 +18,7 @@ import androidx.fragment.app.viewModels
 import com.example.ternakapp.data.local.AuthPreference
 import com.example.ternakapp.data.response.PostLoc
 import com.example.ternakapp.databinding.FragmentHomeBinding
+import com.example.ternakapp.utils.DateUtils
 import com.example.ternakapp.utils.NavigationUtils
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -96,7 +97,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun getCurrentLocation() {
-        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return
         }
         fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
@@ -107,7 +109,8 @@ class HomeFragment : Fragment() {
                 mapController.setCenter(startPoint)
                 binding.map.invalidate()
             } else {
-                Toast.makeText(requireContext(), "Gagal mendapatkan lokasi", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Gagal mendapatkan lokasi", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
     }
@@ -118,10 +121,13 @@ class HomeFragment : Fragment() {
             val marker = Marker(binding.map)
             marker.position = geoPoint
             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
-            marker.title = "${post.jenisAksi}\nJenis ternak: ${post.jenisTernak}\nStatus: ${post.status}"
+            marker.title = "${post.jenisAksi}\n" +
+                    "Jenis ternak: ${post.jenisTernak}\n" +
+                    "Tanggal: ${DateUtils.formatDate(post.createdAt)}\n" +
+                    "Status: ${post.status}"
             binding.map.overlays.add(marker)
         }
-        binding.map.invalidate() // refresh map to show markers
+        binding.map.invalidate()
     }
 
     override fun onResume() {

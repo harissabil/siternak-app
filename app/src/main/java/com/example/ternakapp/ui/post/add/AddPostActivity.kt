@@ -32,7 +32,6 @@ class AddPostActivity : AppCompatActivity() {
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
-        // Register the activity result launcher
         requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
             if (isGranted) {
                 Toast.makeText(this, "Izin lokasi diberikan", Toast.LENGTH_SHORT).show()
@@ -93,20 +92,20 @@ class AddPostActivity : AppCompatActivity() {
             }
 
             fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-                    location?.let {
-                        val latitude = it.latitude.toString()
-                        val longitude = it.longitude.toString()
+                location?.let {
+                    val latitude = it.latitude.toString()
+                    val longitude = it.longitude.toString()
 
-                        if (token != null) {
-                            if (postId != null) {
-                                viewModel.updatePost(token, postId!!, jenisTernak, jenisAksi, keterangan)
-                            } else {
-                                viewModel.addNewPost(token, jenisTernak, jenisAksi, keterangan, latitude, longitude)
-                            }
+                    if (token != null) {
+                        if (postId != null) {
+                            viewModel.updatePost(token, postId!!, jenisTernak, jenisAksi, keterangan)
                         } else {
-                            Toast.makeText(this, "Gagal mendapatkan lokasi", Toast.LENGTH_SHORT).show()
+                            viewModel.addNewPost(token, jenisTernak, jenisAksi, keterangan, latitude, longitude)
                         }
+                    } else {
+                        Toast.makeText(this, "Gagal mendapatkan lokasi", Toast.LENGTH_SHORT).show()
                     }
+                }
             }
         }
 
@@ -120,7 +119,7 @@ class AddPostActivity : AppCompatActivity() {
     }
 
     private fun initializeDropdowns() {
-        val jenisTernakArray = arrayOf("Sapi", "Kambing", "Domba", "Kerbau", "Kuda", "Babi", "Ayam", "Bebek", "Lainnya" )
+        val jenisTernakArray = arrayOf("Sapi", "Kambing", "Domba", "Kerbau", "Kuda", "Babi", "Ayam", "Bebek", "Lainnya")
         val jenisAksiArray = arrayOf("Pelaporan Penyakit", "Permintaan Vaksin")
 
         val ternakAdapter = ArrayAdapter(this, R.layout.simple_dropdown_item_1line, jenisTernakArray)

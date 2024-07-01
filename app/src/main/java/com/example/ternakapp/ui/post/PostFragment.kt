@@ -22,7 +22,6 @@ import com.example.ternakapp.ui.post.detail.PostDetailActivity
 import com.example.ternakapp.utils.NavigationUtils
 
 class PostFragment : Fragment() {
-
     private lateinit var postDetailLauncher: ActivityResultLauncher<Intent>
     private var _binding: FragmentPostBinding? = null
     private val viewModel: PostViewModel by viewModels()
@@ -40,35 +39,11 @@ class PostFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         (activity as? AppCompatActivity)?.supportActionBar?.hide()
 
-        swipeRefreshLayout = binding.root.findViewById(R.id.swipeRefreshLayout)
-        swipeRefreshLayout.setOnRefreshListener {
-            val authPreference = AuthPreference(requireContext())
-            val token = authPreference.getToken()
-            if (!token.isNullOrEmpty()) {
-                viewModel.reloadPosts(token)
-            }
-        }
-
-        postDetailLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == AppCompatActivity.RESULT_OK) {
-                val authPreference = AuthPreference(requireContext())
-                val token = authPreference.getToken()
-                if (token != null && result.data?.getBooleanExtra("NEEDS_RELOAD", false) == true) {
-                    viewModel.reloadPosts(token)
-                }
-            }
-        }
-
-        val authPreference = AuthPreference(requireContext())
-        val token = authPreference.getToken()
-
-        if (token.isNullOrEmpty()) {
-            NavigationUtils.navigateToLogin(requireContext())
-            return
-        }
+        setupSwipeRefreshLayout()
+        setupPostDetailLauncher()
+        checkAuthAndLoadPosts()
 
         val adapter = PostAdapter(requireContext(), emptyList()) { post ->
             val intent = Intent(requireContext(), PostDetailActivity::class.java).apply {
@@ -106,8 +81,38 @@ class PostFragment : Fragment() {
                 Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
             }
         }
+    }
 
-        viewModel.loadPosts(token)
+    private fun setupSwipeRefreshLayout() {
+        swipeRefreshLayout = binding.swipeRefreshLayout
+        swipeRefreshLayout.setOnRefreshListener {
+            reloadPosts()
+        }
+    }
+
+    private fun reloadPosts() {
+        AuthPreference(requireContext()).getToken()?.let {
+            viewModel.reloadPosts(it)
+        }
+    }
+
+    private fun setupPostDetailLauncher() {
+        postDetailLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == AppCompatActivity.RESULT_OK) {
+                result.data?.getBooleanExtra("NEEDS_RELOAD", false)?.let {
+                    if (it) reloadPosts()
+                }
+            }
+        }
+    }
+
+    private fun checkAuthAndLoadPosts() {
+        val token = AuthPreference(requireContext()).getToken()
+        if (token.isNullOrEmpty()) {
+            NavigationUtils.navigateToLogin(requireContext())
+        } else {
+            viewModel.loadPosts(token)
+        }
     }
 
     override fun onDestroyView() {

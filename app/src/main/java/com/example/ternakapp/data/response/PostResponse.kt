@@ -123,6 +123,9 @@ data class PostLoc(
     @SerializedName("latitude")
     val latitude: Double,
 
+    @SerializedName("createdAt")
+    val createdAt: String,
+
     @SerializedName("status")
     val status: String
 )

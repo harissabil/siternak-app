@@ -49,8 +49,6 @@ class AddPostViewModel : ViewModel() {
     fun addNewPost(token: String, jenisTernak: String, jenisAksi: String, keterangan: String, latitude: String, longitude: String) {
         _isLoading.value = true
         val apiService = ApiConfig.getApiService()
-
-        // Logging data
         val postData = PostDataClass(jenisTernak, jenisAksi, keterangan, latitude, longitude)
         Log.d("AddPostViewModel", "addNewPost: $postData")
 
