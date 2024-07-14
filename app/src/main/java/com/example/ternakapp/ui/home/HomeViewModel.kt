@@ -24,6 +24,7 @@ class HomeViewModel : ViewModel() {
     private val _message = MutableLiveData<String?>()
     val message: LiveData<String?> = _message
 
+    // Fungsi untuk memuat nama pengguna dari SharedPreferences, nama akan ditampilkan di bagian greeting
     fun loadUserName(context: Context) {
         val preferences = context.getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
         _userName.value = preferences.getString("user_name", "Pengguna")

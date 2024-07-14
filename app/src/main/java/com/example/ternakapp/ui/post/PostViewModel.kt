@@ -20,6 +20,7 @@ class PostViewModel : ViewModel() {
     private val _message = MutableLiveData<String?>()
     val message: LiveData<String?> = _message
 
+    // Fungsi untuk memuat data post dari API
     fun loadPosts(token: String) {
         _isLoading.value = true
         val apiService = ApiConfig.getApiService()
@@ -30,7 +31,6 @@ class PostViewModel : ViewModel() {
                 _isLoading.value = false
                 if (response.isSuccessful) {
                     response.body()?.let {
-                        //_posts.value = it.data.posts
                         // Urutkan post berdasarkan createdAt dalam urutan menurun
                         val sortedPosts = it.data.posts.sortedByDescending { post -> post.createdAt }
                         _posts.value = sortedPosts
@@ -48,6 +48,7 @@ class PostViewModel : ViewModel() {
             }
         })
     }
+
     // reload data setelah penghapusan
     fun reloadPosts(token: String) {
         loadPosts(token)

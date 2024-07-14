@@ -10,6 +10,7 @@ import com.example.ternakapp.data.response.PostItem
 import com.example.ternakapp.databinding.ItemPostBinding
 import com.example.ternakapp.utils.DateUtils
 
+// PostAdapter class to handle post data that will be displayed in PostFragment
 class PostAdapter(
     private val context: Context,
     private var posts: List<PostItem>,
@@ -21,6 +22,7 @@ class PostAdapter(
             binding.root.setOnClickListener(this)
         }
 
+        // Atur yang ingin ditampilkan pada kontainer
         fun bind(post: PostItem) {
             binding.jenisAksiTv.text = post.jenisAksi
             binding.createdDateTv.text = DateUtils.formatDate(post.createdAt)
@@ -48,6 +50,7 @@ class PostAdapter(
 
     override fun getItemCount(): Int = posts.size
 
+    // Function to update posts data, must be refreshed each time the data changes
     @SuppressLint("NotifyDataSetChanged")
     fun updatePosts(newPosts: List<PostItem>) {
         posts = newPosts

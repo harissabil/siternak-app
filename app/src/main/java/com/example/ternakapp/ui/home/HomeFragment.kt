@@ -40,11 +40,13 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
+
         // Konfigurasi OSMDroid
         Configuration.getInstance().load(
             requireContext(),
             androidx.preference.PreferenceManager.getDefaultSharedPreferences(requireContext())
         )
+
         return binding.root
     }
 
@@ -54,12 +56,15 @@ class HomeFragment : Fragment() {
 
         (activity as? AppCompatActivity)?.supportActionBar?.hide()
 
+        // Pengaturan greeting pada HomeFragment
         homeViewModel.loadUserName(requireContext())
         homeViewModel.userName.observe(viewLifecycleOwner) { userName ->
             binding.tvHello.text = "Halo, $userName \uD83D\uDC4B"
         }
+
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
 
+        // Pengaturan untuk meluncurkan permintaan izin lokasi
         requestPermissionLauncher =
             registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
                 if (isGranted) {
@@ -69,7 +74,7 @@ class HomeFragment : Fragment() {
                 }
             }
 
-        // Check location permission
+        // Cek izin lokasi. Jika diizinkan, ambil lokasi sekarang. Jika tidak, tampilkan requestPermissionLauncher
         if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
         } else {
@@ -78,6 +83,7 @@ class HomeFragment : Fragment() {
 
         binding.map.setMultiTouchControls(true)
 
+        // Memuat data post dari API untuk ditampilkan dalam bentuk marker pada peta
         homeViewModel.posts.observe(viewLifecycleOwner) { posts ->
             posts?.let { updateMapWithPosts(it) }
         }
@@ -86,9 +92,9 @@ class HomeFragment : Fragment() {
             binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
         }
 
+        // Cek token. Jika ada, marker akan ditampilkan. Jika tidak, navigasikan ke halaman login.
         val authPreference = AuthPreference(requireContext())
         val token = authPreference.getToken()
-
         if (token != null) {
             homeViewModel.getAllPostsWithLoc(token)
         } else {
@@ -96,6 +102,7 @@ class HomeFragment : Fragment() {
         }
     }
 
+    // Fungsi untuk mendapatkan lokasi sekarang, bisa dipisahkan ke dalam ViewModel jika perlu
     private fun getCurrentLocation() {
         if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
             ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -115,6 +122,7 @@ class HomeFragment : Fragment() {
         }
     }
 
+    // Fungsi untuk menambahkan dan mengatur marker pada peta
     private fun updateMapWithPosts(posts: List<PostLoc>) {
         for (post in posts) {
             val geoPoint = GeoPoint(post.latitude ?: 0.0, post.longitude ?: 0.0)

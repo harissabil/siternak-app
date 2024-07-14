@@ -67,7 +67,7 @@ data class PostDataClass(
     val longitude: String
 )
 
-// respons for get all posts by user id
+// response for get all posts by user id
 data class ListPostItem(
     @SerializedName("message")
     val message: String,
@@ -178,7 +178,7 @@ data class UpdatePostDataClass(
     val keterangan: String
 )
 
-//response for delete post
+// response for delete post
 data class DeleteResponse(
     @SerializedName("message")
     val message: String,

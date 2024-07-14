@@ -2,6 +2,7 @@ package com.example.ternakapp.data.local
 
 import android.content.Context
 
+// AuthPreference class to store token value
 class AuthPreference(context: Context) {
     companion object {
         private const val AUTH_PREFS = "auth_prefs"
