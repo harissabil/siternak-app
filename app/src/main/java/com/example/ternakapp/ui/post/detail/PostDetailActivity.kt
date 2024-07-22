@@ -14,7 +14,6 @@ import com.example.ternakapp.ui.post.add.AddPostActivity
 import com.example.ternakapp.utils.DateUtils
 
 class PostDetailActivity : AppCompatActivity() {
-
     private lateinit var binding: ActivityDetailPostBinding
     private val viewModel: PostDetailViewModel by viewModels()
     private var postId: String? = null
@@ -33,11 +32,14 @@ class PostDetailActivity : AppCompatActivity() {
     }
 
     private fun init() {
+        // enable refresh layout (supaya bisa di-swipe ke bawah untuk refresh)
         swipeRefreshLayout = binding.swipeRefreshLayout
         postId = intent.getStringExtra("POST_ID")
         token = AuthPreference(this).getToken()
     }
 
+    // update adapter apabila sudah ada data baru
+    // untuk update UI, layout harus di-refresh terlebih dulu
     private fun setupObservers() {
         viewModel.post.observe(this) { post ->
             swipeRefreshLayout.isRefreshing = false
@@ -60,6 +62,7 @@ class PostDetailActivity : AppCompatActivity() {
         }
     }
 
+    // setup listeners untuk mengatur aksi yg dilakukan terhadap button back, delete, dan edit
     private fun setupListeners() {
         swipeRefreshLayout.setOnRefreshListener {
             loadPostDetails()
@@ -73,6 +76,8 @@ class PostDetailActivity : AppCompatActivity() {
             postId?.let { id -> viewModel.deletePost(token!!, id) }
         }
 
+        // aktivitas edit menggunakan layout yang sama dengan activity_add_post
+        // logic edit disimpan pada addPostActivity
         binding.btnEdit.setOnClickListener {
             val intent = Intent(this, AddPostActivity::class.java).apply {
                 putExtra("POST_ID", postId)
@@ -87,9 +92,11 @@ class PostDetailActivity : AppCompatActivity() {
         binding.apply {
             edPetugas.text = post.data.petugas
             edJenisTernak.text = post.data.jenisTernak
+            edJumlahTernak.text = post.data.jumlahTernak.toString()
             edJenisAksi.text = post.data.jenisAksi
+            edKeteranganAksi.text = post.data.keteranganAksi
+            edAlamatAksi.text = post.data.alamatAksi
             edTanggal.text = DateUtils.formatDate(post.data.createdAt)
-            edKeterangan.text = post.data.keterangan
             edStatus.text = post.data.status
         }
     }

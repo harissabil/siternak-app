@@ -33,7 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:text="Jenis Ternak*"
+        android:text="Jenis Ternak"
         android:textSize="16sp"
         android:textStyle="bold"
         android:textColor="@color/title_black"
@@ -66,25 +66,80 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
+        android:id="@+id/tv_jumlah_ternak"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Jumlah Ternak"
+        android:textColor="@color/title_black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@+id/jenis_ternak_layout"
+        tools:layout_editor_absoluteX="20dp" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/jumlah_ternak_layout"
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:boxCornerRadiusBottomStart="8dp"
+        app:boxCornerRadiusBottomEnd="8dp"
+        app:boxCornerRadiusTopStart="8dp"
+        app:boxCornerRadiusTopEnd="8dp"
+        app:boxStrokeColor="@color/red"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintTop_toBottomOf="@+id/tv_jumlah_ternak">
+
+        <LinearLayout
+            android:id="@+id/ll_jumlah_ternak"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="5dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/btn_decrease"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/baseline_indeterminate_check_box_24"
+                android:background="?attr/selectableItemBackground"
+                android:gravity="center_vertical"
+                android:contentDescription="Decrease" />
+
+            <TextView
+                android:id="@+id/tv_counter"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="1"
+                android:textSize="20sp"
+                android:gravity="center"/>
+
+            <ImageButton
+                android:id="@+id/btn_increase"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/baseline_add_box_24"
+                android:background="?attr/selectableItemBackground"
+                android:gravity="center_vertical"
+                android:contentDescription="Increase" />
+        </LinearLayout>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
         android:id="@+id/tv_jenis_aksi"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="Jenis Laporan*"
+        android:text="Jenis Laporan"
         android:textSize="16sp"
         android:textStyle="bold"
         android:textColor="@color/title_black"
-        app:layout_constraintTop_toBottomOf="@+id/jenis_ternak_layout"
+        app:layout_constraintTop_toBottomOf="@+id/jumlah_ternak_layout"
         tools:layout_editor_absoluteX="20dp" />
-
-    <TextView
-        android:id="@+id/tv_jenis_aksi_desc"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="0dp"
-        android:textSize="12sp"
-        android:textColor="@color/title_black"
-        app:layout_constraintTop_toBottomOf="@+id/tv_jenis_aksi"/>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/jenis_aksi_layout"
@@ -116,7 +171,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="Keterangan"
+        android:text="Keterangan Laporan"
         android:textColor="@color/title_black"
         android:textSize="16sp"
         android:textStyle="bold"
@@ -150,13 +205,51 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
-        android:id="@+id/tv_required"
+        android:id="@+id/tv_alamat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text="(*) wajib diisi"
+        android:layout_marginTop="20dp"
+        android:text="Lokasi Pelaporan"
+        android:textColor="@color/title_black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@+id/keterangan_layout"
+        tools:layout_editor_absoluteX="20dp" />
+
+    <TextView
+        android:id="@+id/tv_alamat_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="Isikan detail lokasi tempat laporan dibuat"
+        android:textSize="12sp"
+        app:layout_constraintTop_toBottomOf="@+id/tv_alamat"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/alamat_layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:boxCornerRadiusBottomStart="8dp"
+        app:boxCornerRadiusBottomEnd="8dp"
+        app:boxCornerRadiusTopStart="8dp"
+        app:boxCornerRadiusTopEnd="8dp"
+        app:boxStrokeColor="@color/red"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/keterangan_layout"/>
+        app:layout_constraintTop_toBottomOf="@+id/tv_alamat_desc">
+
+        <EditText
+            android:id="@+id/ed_alamat"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:ems="40"
+            android:hint="Nomor peternakan, nama jalan, kelurahan"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            tools:ignore="SpeakableTextPresentCheck,TextFields" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_send"

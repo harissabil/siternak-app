@@ -96,6 +96,27 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tv_jenis_ternak" />
 
+        <TextView
+            android:id="@+id/tv_jumlah_ternak"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Jumlah Ternak"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ed_jenis_ternak"/>
+
+        <TextView
+            android:id="@+id/ed_jumlah_ternak"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="160dp"
+            android:text="@string/blank_data"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_jumlah_ternak" />
+
     <TextView
         android:id="@+id/tv_jenis_aksi"
         android:layout_width="wrap_content"
@@ -105,7 +126,7 @@
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ed_jenis_ternak"/>
+        app:layout_constraintTop_toBottomOf="@+id/ed_jumlah_ternak"/>
 
     <TextView
         android:id="@+id/ed_jenis_aksi"
@@ -118,28 +139,7 @@
         app:layout_constraintTop_toTopOf="@+id/tv_jenis_aksi" />
 
     <TextView
-        android:id="@+id/tv_tanggal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Tanggal Dibuat"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ed_jenis_aksi"/>
-
-    <TextView
-        android:id="@+id/ed_tanggal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="160dp"
-        android:text="@string/blank_data"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_tanggal" />
-
-    <TextView
-        android:id="@+id/tv_keterangan"
+        android:id="@+id/tv_keterangan_aksi"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -147,18 +147,59 @@
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ed_tanggal"/>
+        app:layout_constraintTop_toBottomOf="@+id/ed_jenis_aksi"/>
 
     <TextView
-        android:id="@+id/ed_keterangan"
+        android:id="@+id/ed_keterangan_aksi"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="160dp"
         android:text="@string/blank_data"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_keterangan" />
+        app:layout_constraintTop_toTopOf="@+id/tv_keterangan_aksi" />
 
+        <TextView
+            android:id="@+id/tv_alamat_aksi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Lokasi Laporan"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ed_keterangan_aksi"/>
+
+        <TextView
+            android:id="@+id/ed_alamat_aksi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="160dp"
+            android:text="@string/blank_data"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_alamat_aksi" />
+
+        <TextView
+            android:id="@+id/tv_tanggal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Tanggal Dibuat"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ed_alamat_aksi"/>
+
+        <TextView
+            android:id="@+id/ed_tanggal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="160dp"
+            android:text="@string/blank_data"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_tanggal" />
     <TextView
         android:id="@+id/tv_status"
         android:layout_width="wrap_content"
@@ -168,7 +209,7 @@
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ed_keterangan"/>
+        app:layout_constraintTop_toBottomOf="@+id/ed_tanggal"/>
 
     <TextView
         android:id="@+id/ed_status"

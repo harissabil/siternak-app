@@ -22,7 +22,6 @@ class ProfileDetailActivity : AppCompatActivity() {
 
         val authPreference = AuthPreference(this)
         val token = authPreference.getToken()
-
         if (token.isNullOrEmpty()) {
             Toast.makeText(this, "Token tidak ditemukan. Silakan login kembali.", Toast.LENGTH_SHORT).show()
             finish()
@@ -52,6 +51,7 @@ class ProfileDetailActivity : AppCompatActivity() {
         supportActionBar?.hide()
     }
 
+    // Mengatur tata letak berdasarkan data yang didapat dari UserDataClass
     private fun updateUI(user: UserDataClass) {
         binding.tvNama.text = user.nama
         binding.tvNoTelp.text = user.noTelp

@@ -24,11 +24,17 @@ data class PostData(
     @SerializedName("jenisTernak")
     val jenisTernak: String,
 
+    @SerializedName("jumlahTernak")
+    val jumlahTernak: String,
+
     @SerializedName("jenisAksi")
     val jenisAksi: String,
 
-    @SerializedName("keterangan")
-    val keterangan: String,
+    @SerializedName("keteranganAksi")
+    val keteranganAksi: String,
+
+    @SerializedName("alamatAksi")
+    val alamatAksi: String,
 
     @SerializedName("latitude")
     val latitude: Double,
@@ -54,11 +60,17 @@ data class PostDataClass(
     @SerializedName("jenisTernak")
     val jenisTernak: String,
 
+    @SerializedName("jumlahTernak")
+    val jumlahTernak: String,
+
     @SerializedName("jenisAksi")
     val jenisAksi: String,
 
-    @SerializedName("keterangan")
-    val keterangan: String,
+    @SerializedName("keteranganAksi")
+    val keteranganAksi: String,
+
+    @SerializedName("alamatAksi")
+    val alamatAksi: String,
 
     @SerializedName("latitude")
     val latitude: String,
@@ -138,11 +150,17 @@ data class Post(
     @SerializedName("jenisTernak")
     val jenisTernak: String,
 
+    @SerializedName("jumlahTernak")
+    val jumlahTernak: String,
+
     @SerializedName("jenisAksi")
     val jenisAksi: String,
 
-    @SerializedName("keterangan")
-    val keterangan: String,
+    @SerializedName("keteranganAksi")
+    val keteranganAksi: String,
+
+    @SerializedName("alamatAksi")
+    val alamatAksi: String,
 
     @SerializedName("latitude")
     val latitude: Double,
@@ -171,11 +189,17 @@ data class UpdatePostDataClass(
     @SerializedName("jenisTernak")
     val jenisTernak: String,
 
+    @SerializedName("jumlahTernak")
+    val jumlahTernak: String,
+
     @SerializedName("jenisAksi")
     val jenisAksi: String,
 
-    @SerializedName("keterangan")
-    val keterangan: String
+    @SerializedName("keteranganAksi")
+    val keteranganAksi: String,
+
+    @SerializedName("alamatAksi")
+    val alamatAksi: String,
 )
 
 // response for delete post

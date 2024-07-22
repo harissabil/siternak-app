@@ -46,13 +46,13 @@ class AddPostViewModel : ViewModel() {
         })
     }
 
-    fun addNewPost(token: String, jenisTernak: String, jenisAksi: String, keterangan: String, latitude: String, longitude: String) {
+    fun addNewPost(token: String, jenisTernak: String, jumlahTernak: String, jenisAksi: String, keteranganAksi: String, alamatAksi: String, latitude: String, longitude: String) {
         _isLoading.value = true
         val apiService = ApiConfig.getApiService()
-        val postData = PostDataClass(jenisTernak, jenisAksi, keterangan, latitude, longitude)
-        Log.d("AddPostViewModel", "addNewPost: $postData")
+        val postData = PostDataClass(jenisTernak, jumlahTernak, jenisAksi, keteranganAksi, alamatAksi, latitude, longitude)
+        Log.d("AddPostViewModel", "Preparing to add new post: $postData")
 
-        val call = apiService.addPost("Bearer $token", PostDataClass(jenisTernak, jenisAksi, keterangan, latitude, longitude))
+        val call = apiService.addPost("Bearer $token", postData)
 
         call.enqueue(object : Callback<PostResponse> {
             override fun onResponse(call: Call<PostResponse>, response: Response<PostResponse>) {
@@ -81,10 +81,10 @@ class AddPostViewModel : ViewModel() {
         })
     }
 
-    fun updatePost(token: String, postId: String, jenisTernak: String, jenisAksi: String, keterangan: String) {
+    fun updatePost(token: String, postId: String, jenisTernak: String, jumlahTernak: String, jenisAksi: String, keteranganAksi: String, alamatAksi: String) {
         _isLoading.value = true
         val apiService = ApiConfig.getApiService()
-        val call = apiService.updatePost("Bearer $token", postId, UpdatePostDataClass(jenisTernak, jenisAksi, keterangan))
+        val call = apiService.updatePost("Bearer $token", postId, UpdatePostDataClass(jenisTernak, jumlahTernak, jenisAksi, keteranganAksi, alamatAksi))
 
         call.enqueue(object : Callback<PostResponse> {
             override fun onResponse(call: Call<PostResponse>, response: Response<PostResponse>) {

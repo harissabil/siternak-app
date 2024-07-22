@@ -17,7 +17,6 @@ import com.example.ternakapp.ui.profile.detail.ProfileDetailActivity
 import com.example.ternakapp.utils.NavigationUtils
 
 class ProfileFragment : Fragment() {
-
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
     private val profileViewModel: ProfileViewModel by viewModels()
@@ -32,11 +31,11 @@ class ProfileFragment : Fragment() {
 
         (activity as? AppCompatActivity)?.supportActionBar?.hide()
 
+        // Header pada laman profil
         Glide.with(this)
             .load("https://i2.wp.com/zubnylekarpodolsky.sk/wp-content/uploads/2013/06/blank_profile.png")
             .circleCrop()
             .into(binding.ivPengguna)
-
         profileViewModel.loadUserName(requireContext())
         profileViewModel.userName.observe(viewLifecycleOwner) { userName ->
             binding.tvNamaPengguna.text = userName
