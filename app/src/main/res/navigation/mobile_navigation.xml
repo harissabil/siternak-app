@@ -7,17 +7,17 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.example.ternakapp.ui.home.HomeFragment"
+        android:name="com.siternak.app.ui.home.HomeFragment"
         tools:layout="@layout/fragment_home"
         android:label="HomeFragment" />
     <fragment
         android:id="@+id/navigation_post"
         tools:layout="@layout/fragment_post"
-        android:name="com.example.ternakapp.ui.post.PostFragment"
+        android:name="com.siternak.app.ui.post.PostFragment"
         android:label="PostFragment" />
     <fragment
         android:id="@+id/navigation_profile"
         tools:layout="@layout/fragment_profile"
-        android:name="com.example.ternakapp.ui.profile.ProfileFragment"
+        android:name="com.siternak.app.ui.profile.ProfileFragment"
         android:label="ProfileFragment"/>
 </navigation>
