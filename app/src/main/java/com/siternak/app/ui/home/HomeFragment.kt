@@ -2,6 +2,7 @@ package com.siternak.app.ui.home
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
@@ -14,30 +15,37 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import com.siternak.app.core.utils.DateUtils
+import com.siternak.app.core.utils.NavigationUtils
 import com.siternak.app.data.local.AuthPreference
 import com.siternak.app.data.response.PostLoc
 import com.siternak.app.databinding.FragmentHomeBinding
-import com.siternak.app.utils.DateUtils
-import com.siternak.app.utils.NavigationUtils
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
+import com.siternak.app.domain.repository.AuthRepository
+import com.siternak.app.ui.login.LoginActivity
+import com.siternak.app.ui.user_form.UserFormActivity
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.osmdroid.config.Configuration
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.Marker
+
 
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private val homeViewModel: HomeViewModel by viewModels()
+    private val homeViewModel: HomeViewModel by viewModel()
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
+
+    private val authRepository: AuthRepository by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
@@ -56,8 +64,18 @@ class HomeFragment : Fragment() {
 
         (activity as? AppCompatActivity)?.supportActionBar?.hide()
 
-        // Pengaturan greeting pada HomeFragment
-        homeViewModel.loadUserName(requireContext())
+        val isLoggedIn = authRepository.isUserLoggedIn()
+        if (!isLoggedIn) return
+
+        // Apabila user belum mengisi form, navigasikan ke halaman isi form
+        homeViewModel.isFormUserAlreadyFilled.observe(viewLifecycleOwner) { isFormUserAlreadyFilled ->
+            if (!isFormUserAlreadyFilled) {
+                val intent = Intent(requireContext(), UserFormActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                requireContext().startActivity(intent)
+            }
+        }
         homeViewModel.userName.observe(viewLifecycleOwner) { userName ->
             binding.tvHello.text = "Halo, $userName \uD83D\uDC4B"
         }
@@ -70,12 +88,20 @@ class HomeFragment : Fragment() {
                 if (isGranted) {
                     getCurrentLocation()
                 } else {
-                    Toast.makeText(requireContext(), "Izin lokasi ditolak", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Izin lokasi ditolak", Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
 
         // Cek izin lokasi. Jika diizinkan, ambil lokasi sekarang. Jika tidak, tampilkan requestPermissionLauncher
-        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
             requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
         } else {
             getCurrentLocation()
@@ -92,7 +118,7 @@ class HomeFragment : Fragment() {
             binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
         }
 
-        // Cek token. Jika ada, marker akan ditampilkan. Jika tidak, navigasikan ke halaman login.
+        // Cek status login. Jika ada, marker akan ditampilkan. Jika tidak, navigasikan ke halaman login.
         val authPreference = AuthPreference(requireContext())
         val token = authPreference.getToken()
         if (token != null) {
@@ -104,8 +130,15 @@ class HomeFragment : Fragment() {
 
     // Fungsi untuk mendapatkan lokasi sekarang, bisa dipisahkan ke dalam ViewModel jika perlu
     private fun getCurrentLocation() {
-        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-            ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
             return
         }
         fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
@@ -125,7 +158,7 @@ class HomeFragment : Fragment() {
     // Fungsi untuk menambahkan dan mengatur marker pada peta
     private fun updateMapWithPosts(posts: List<PostLoc>) {
         for (post in posts) {
-            val geoPoint = GeoPoint(post.latitude ?: 0.0, post.longitude ?: 0.0)
+            val geoPoint = GeoPoint(post.latitude, post.longitude)
             val marker = Marker(binding.map)
             marker.position = geoPoint
             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)

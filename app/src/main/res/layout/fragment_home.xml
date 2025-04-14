@@ -28,7 +28,7 @@
                 android:id="@+id/tv_hello"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Halo, User"
+                android:text="Halo,"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:textColor="@color/black" />

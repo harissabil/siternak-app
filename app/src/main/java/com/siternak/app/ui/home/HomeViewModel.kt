@@ -4,14 +4,21 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.siternak.app.data.response.ListPostLoc
 import com.siternak.app.data.response.PostLoc
 import com.siternak.app.data.retrofit.ApiConfig
+import com.siternak.app.domain.repository.FirestoreRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel(
+    private val firestoreRepository: FirestoreRepository
+) : ViewModel() {
     private val _posts = MutableLiveData<List<PostLoc>>()
     val posts: LiveData<List<PostLoc>> = _posts
 
@@ -24,10 +31,25 @@ class HomeViewModel : ViewModel() {
     private val _message = MutableLiveData<String?>()
     val message: LiveData<String?> = _message
 
-    // Fungsi untuk memuat nama pengguna dari SharedPreferences, nama akan ditampilkan di bagian greeting
-    fun loadUserName(context: Context) {
-        val preferences = context.getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
-        _userName.value = preferences.getString("user_name", "Pengguna")
+    private val _isFormUserAlreadyFilled = MutableLiveData<Boolean>(true)
+    val isFormUserAlreadyFilled: LiveData<Boolean> = _isFormUserAlreadyFilled
+
+    init {
+        loadUserName()
+    }
+
+    fun loadUserName() = viewModelScope.launch {
+        val userData = firestoreRepository.getUserData()
+        userData.onSuccess {
+            if (it == null) {
+                _isFormUserAlreadyFilled.value = false
+                return@onSuccess
+            } else {
+                _userName.value = it.nama
+            }
+        }.onFailure {
+            _message.value = "Gagal memuat data pengguna: ${it.message}"
+        }
     }
 
     fun getAllPostsWithLoc(token: String) {
