@@ -13,12 +13,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.siternak.app.adapter.PostAdapter
+import com.siternak.app.core.adapter.PostAdapter
 import com.siternak.app.data.local.AuthPreference
 import com.siternak.app.databinding.FragmentPostBinding
 import com.siternak.app.ui.post.add.AddPostActivity
 import com.siternak.app.ui.post.detail.PostDetailActivity
-import com.siternak.app.utils.NavigationUtils
+import com.siternak.app.core.utils.NavigationUtils
 
 class PostFragment : Fragment() {
     private lateinit var postDetailLauncher: ActivityResultLauncher<Intent>
@@ -44,7 +44,7 @@ class PostFragment : Fragment() {
         setupPostDetailLauncher()
         checkAuthAndLoadPosts()
 
-        val adapter = PostAdapter(requireContext(), emptyList()) { post ->
+        val adapter = PostAdapter(emptyList()) { post ->
             val intent = Intent(requireContext(), PostDetailActivity::class.java).apply {
                 putExtra("POST_ID", post.postId)
             }

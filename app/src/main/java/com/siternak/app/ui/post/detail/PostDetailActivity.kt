@@ -11,7 +11,7 @@ import com.siternak.app.data.local.AuthPreference
 import com.siternak.app.data.response.PostResponse
 import com.siternak.app.databinding.ActivityDetailPostBinding
 import com.siternak.app.ui.post.add.AddPostActivity
-import com.siternak.app.utils.DateUtils
+import com.siternak.app.core.utils.DateUtils
 
 class PostDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailPostBinding
