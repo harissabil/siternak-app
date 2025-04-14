@@ -1,37 +1,45 @@
 package com.siternak.app
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.graphics.Insets
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.siternak.app.data.local.AuthPreference
-import com.siternak.app.databinding.ActivityMainBinding
-import com.siternak.app.ui.login.LoginActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.siternak.app.databinding.ActivityMainBinding
+import com.siternak.app.domain.repository.AuthRepository
+import com.siternak.app.ui.login.LoginActivity
+import org.koin.android.ext.android.inject
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
+    private val authRepository: AuthRepository by inject()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         super.onCreate(savedInstanceState)
+        installSplashScreen()
+        enableEdgeToEdge()
         supportActionBar?.hide()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
+            val systemBars: Insets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            WindowInsetsCompat.CONSUMED
+        }
 
-        /*
-        * AuthPreference digunakan untuk menyimpan token yang didapat ketika user berhasil login.
-        * Pada setiap page, dilakukan pengecekan autentikasi untuk memastikan bahwa user yang mengakses
-        * aplikasi adalah user yang telah login.
-        */
-
-        val authPreference = AuthPreference(this)
-        val token = authPreference.getToken()
-        if (token.isNullOrEmpty()) {
+        val isLoggedIn = authRepository.isUserLoggedIn()
+        if (!isLoggedIn) {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
             finish()
