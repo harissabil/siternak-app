@@ -4,9 +4,14 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.siternak.app.data.local.AuthPreference
+import com.siternak.app.domain.repository.AuthRepository
+import kotlinx.coroutines.launch
 
-class ProfileViewModel : ViewModel() {
+class ProfileViewModel(
+    private val authRepository: AuthRepository
+) : ViewModel() {
     private val _userName = MutableLiveData<String>()
     val userName: LiveData<String> get() = _userName
 
@@ -15,10 +20,7 @@ class ProfileViewModel : ViewModel() {
         _userName.value = preferences.getString("user_name", "Pengguna")
     }
 
-    fun logoutUser(context: Context) {
-        val authPreference = AuthPreference(context)
-        authPreference.clearToken()
-        val preferences = context.getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
-        preferences.edit().clear().apply()
+    fun logoutUser() = viewModelScope.launch {
+        authRepository.signOut()
     }
 }

@@ -141,6 +141,7 @@
             android:background="@drawable/button_background"
             android:text="Simpan"
             android:textAllCaps="false"
+            android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold"
             app:cornerRadius="10dp"
