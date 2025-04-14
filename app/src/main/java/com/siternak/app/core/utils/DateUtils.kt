@@ -1,4 +1,4 @@
-package com.siternak.app.utils
+package com.siternak.app.core.utils
 
 import java.text.SimpleDateFormat
 import java.util.Date

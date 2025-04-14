@@ -1,4 +1,4 @@
-package com.siternak.app.utils
+package com.siternak.app.core.utils
 
 import android.content.Context
 import android.content.Intent

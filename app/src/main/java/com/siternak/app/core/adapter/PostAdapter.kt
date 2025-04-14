@@ -1,18 +1,16 @@
-package com.siternak.app.adapter
+package com.siternak.app.core.adapter
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.siternak.app.data.response.PostItem
 import com.siternak.app.databinding.ItemPostBinding
-import com.siternak.app.utils.DateUtils
+import com.siternak.app.core.utils.DateUtils
 
 // PostAdapter class to handle post data that will be displayed in PostFragment
 class PostAdapter(
-    private val context: Context,
     private var posts: List<PostItem>,
     private val onItemClick: (PostItem) -> Unit
 ) : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
