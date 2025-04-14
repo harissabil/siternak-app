@@ -28,16 +28,10 @@
             android:exported="false" />
         <activity android:name=".ui.register.RegisterActivity"
             android:exported="false" />
-        <activity android:name=".ui.home.HomeFragment"
-            android:exported="false" />
-        <activity android:name=".ui.post.PostFragment"
-            android:exported="false" />
         <activity android:name=".ui.post.add.AddPostActivity"
             android:exported="true">
         </activity>
         <activity android:name=".ui.post.detail.PostDetailActivity"
-            android:exported="false" />
-        <activity android:name=".ui.profile.ProfileFragment"
             android:exported="false" />
         <activity android:name=".ui.profile.detail.ProfileDetailActivity"
             android:exported="false" />

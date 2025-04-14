@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.ternakapp'
+    namespace 'com.siternak.app'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.example.ternakapp"
+        applicationId "com.siternak.app"
         minSdk 26
         targetSdk 34
         versionCode 1
