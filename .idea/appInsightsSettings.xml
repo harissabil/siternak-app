@@ -9,9 +9,9 @@
               <option name="connection">
                 <ConnectionSetting>
                   <option name="appId" value="com.siternak.app" />
-                  <option name="mobileSdkAppId" value="1:632396168065:android:08f441e28eea9e9a094680" />
-                  <option name="projectId" value="otpauthternak" />
-                  <option name="projectNumber" value="632396168065" />
+                  <option name="mobileSdkAppId" value="1:101776430453:android:5c116908160cf24a13ef3c" />
+                  <option name="projectId" value="siternak-app" />
+                  <option name="projectNumber" value="101776430453" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
