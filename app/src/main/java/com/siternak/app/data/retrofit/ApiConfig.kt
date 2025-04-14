@@ -1,6 +1,6 @@
 package com.siternak.app.data.retrofit
 
-import androidx.viewbinding.BuildConfig
+import com.siternak.app.BuildConfig
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
