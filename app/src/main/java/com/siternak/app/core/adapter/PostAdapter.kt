@@ -5,14 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.siternak.app.data.response.PostItem
+import com.siternak.app.core.utils.toDateYyyyMmDd
 import com.siternak.app.databinding.ItemPostBinding
-import com.siternak.app.core.utils.DateUtils
+import com.siternak.app.domain.model.Post
 
 // PostAdapter class to handle post data that will be displayed in PostFragment
 class PostAdapter(
-    private var posts: List<PostItem>,
-    private val onItemClick: (PostItem) -> Unit
+    private var posts: List<Post>,
+    private val onItemClick: (Post) -> Unit
 ) : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
 
     inner class PostViewHolder(private val binding: ItemPostBinding) : RecyclerView.ViewHolder(binding.root), View.OnClickListener {
@@ -21,16 +21,16 @@ class PostAdapter(
         }
 
         // Atur yang ingin ditampilkan pada kontainer
-        fun bind(post: PostItem) {
+        fun bind(post: Post) {
             binding.jenisAksiTv.text = post.jenisAksi
-            binding.createdDateTv.text = DateUtils.formatDate(post.createdAt)
+            binding.createdDateTv.text = post.createdAt?.toDateYyyyMmDd()
             binding.statusTv.text = post.status
         }
 
         override fun onClick(v: View?) {
             val position = adapterPosition
             if (position != RecyclerView.NO_POSITION) {
-                posts[position].let { onItemClick(it) }
+                onItemClick(posts[position])
             }
         }
     }
@@ -50,7 +50,7 @@ class PostAdapter(
 
     // Function to update posts data, must be refreshed each time the data changes
     @SuppressLint("NotifyDataSetChanged")
-    fun updatePosts(newPosts: List<PostItem>) {
+    fun updatePosts(newPosts: List<Post>) {
         posts = newPosts
         notifyDataSetChanged()
     }
