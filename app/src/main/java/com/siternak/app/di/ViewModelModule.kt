@@ -2,6 +2,7 @@ package com.siternak.app.di
 
 import com.siternak.app.ui.home.HomeViewModel
 import com.siternak.app.ui.login.LoginViewModel
+import com.siternak.app.ui.post.PostViewModel
 import com.siternak.app.ui.profile.ProfileViewModel
 import com.siternak.app.ui.register.RegisterViewModel
 import com.siternak.app.ui.user_form.UserFormViewModel
@@ -13,5 +14,6 @@ val viewModelModule = module {
     viewModelOf(::RegisterViewModel)
     viewModelOf(::UserFormViewModel)
     viewModelOf(::HomeViewModel)
+    viewModelOf(::PostViewModel)
     viewModelOf(::ProfileViewModel)
 }
