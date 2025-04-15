@@ -1,279 +1,285 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="20dp">
+    android:fillViewport="true">
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_back"
-        android:layout_width="12dp"
-        android:layout_height="20dp"
-        android:background="@drawable/baseline_back_button"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/change_profile_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="20dp"
-        android:text="Laporan"
-        android:textColor="@color/title_black"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@id/btn_back"
-        app:layout_constraintBottom_toBottomOf="@+id/btn_back"
-        app:layout_constraintTop_toTopOf="@+id/btn_back"
-        tools:layout_editor_absoluteX="20dp" />
-
-    <TextView
-        android:id="@+id/tv_jenis_ternak"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:text="Jenis Ternak"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:textColor="@color/title_black"
-        app:layout_constraintTop_toBottomOf="@+id/change_profile_tv"
-        tools:layout_editor_absoluteX="20dp" />
+        android:layout_height="match_parent"
+        android:padding="20dp">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/jenis_ternak_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        app:boxCornerRadiusBottomStart="8dp"
-        app:boxCornerRadiusBottomEnd="8dp"
-        app:boxCornerRadiusTopStart="8dp"
-        app:boxCornerRadiusTopEnd="8dp"
-        app:boxStrokeColor="@color/red"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintTop_toBottomOf="@+id/tv_jenis_ternak"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_back"
+            android:layout_width="12dp"
+            android:layout_height="20dp"
+            android:background="@drawable/baseline_back_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <AutoCompleteTextView
-            android:id="@+id/autoCompleteTextViewJenisTernak"
-            android:layout_width="match_parent"
-            android:layout_height="52dp"
-            android:inputType="none"
-            android:hint="Pilih Jenis Ternak"
-            android:focusableInTouchMode="false"/>
-    </com.google.android.material.textfield.TextInputLayout>
+        <TextView
+            android:id="@+id/change_profile_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:text="Laporan"
+            android:textColor="@color/title_black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_back"
+            app:layout_constraintStart_toEndOf="@id/btn_back"
+            app:layout_constraintTop_toTopOf="@+id/btn_back"
+            tools:layout_editor_absoluteX="20dp" />
 
-    <TextView
-        android:id="@+id/tv_jumlah_ternak"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Jumlah Ternak"
-        android:textColor="@color/title_black"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@+id/jenis_ternak_layout"
-        tools:layout_editor_absoluteX="20dp" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/jumlah_ternak_layout"
-        android:layout_marginTop="5dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:boxCornerRadiusBottomStart="8dp"
-        app:boxCornerRadiusBottomEnd="8dp"
-        app:boxCornerRadiusTopStart="8dp"
-        app:boxCornerRadiusTopEnd="8dp"
-        app:boxStrokeColor="@color/red"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintTop_toBottomOf="@+id/tv_jumlah_ternak">
-
-        <LinearLayout
-            android:id="@+id/ll_jumlah_ternak"
+        <TextView
+            android:id="@+id/tv_jenis_ternak"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="5dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_marginTop="40dp"
+            android:text="Jenis Ternak"
+            android:textColor="@color/title_black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@+id/change_profile_tv"
+            tools:layout_editor_absoluteX="20dp" />
 
-            <ImageButton
-                android:id="@+id/btn_decrease"
-                android:layout_width="wrap_content"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/jenis_ternak_layout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            app:boxCornerRadiusBottomEnd="8dp"
+            app:boxCornerRadiusBottomStart="8dp"
+            app:boxCornerRadiusTopEnd="8dp"
+            app:boxCornerRadiusTopStart="8dp"
+            app:boxStrokeColor="@color/red"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_jenis_ternak">
+
+            <AutoCompleteTextView
+                android:id="@+id/autoCompleteTextViewJenisTernak"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:focusableInTouchMode="false"
+                android:hint="Pilih Jenis Ternak"
+                android:inputType="none" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/tv_jumlah_ternak"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Jumlah Ternak"
+            android:textColor="@color/title_black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@+id/jenis_ternak_layout"
+            tools:layout_editor_absoluteX="20dp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/jumlah_ternak_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            app:boxCornerRadiusBottomEnd="8dp"
+            app:boxCornerRadiusBottomStart="8dp"
+            app:boxCornerRadiusTopEnd="8dp"
+            app:boxCornerRadiusTopStart="8dp"
+            app:boxStrokeColor="@color/red"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_jumlah_ternak">
+
+            <LinearLayout
+                android:id="@+id/ll_jumlah_ternak"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:src="@drawable/baseline_indeterminate_check_box_24"
-                android:background="?attr/selectableItemBackground"
+                android:layout_marginVertical="5dp"
                 android:gravity="center_vertical"
-                android:contentDescription="Decrease" />
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/tv_counter"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="1"
-                android:textSize="20sp"
-                android:gravity="center"/>
+                <ImageButton
+                    android:id="@+id/btn_decrease"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:contentDescription="Decrease"
+                    android:gravity="center_vertical"
+                    android:src="@drawable/baseline_indeterminate_check_box_24" />
 
-            <ImageButton
-                android:id="@+id/btn_increase"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/baseline_add_box_24"
-                android:background="?attr/selectableItemBackground"
-                android:gravity="center_vertical"
-                android:contentDescription="Increase" />
-        </LinearLayout>
-    </com.google.android.material.textfield.TextInputLayout>
+                <TextView
+                    android:id="@+id/tv_counter"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="1"
+                    android:textSize="20sp" />
 
-    <TextView
-        android:id="@+id/tv_jenis_aksi"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Jenis Laporan"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:textColor="@color/title_black"
-        app:layout_constraintTop_toBottomOf="@+id/jumlah_ternak_layout"
-        tools:layout_editor_absoluteX="20dp" />
+                <ImageButton
+                    android:id="@+id/btn_increase"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:contentDescription="Increase"
+                    android:gravity="center_vertical"
+                    android:src="@drawable/baseline_add_box_24" />
+            </LinearLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/jenis_aksi_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        app:boxCornerRadiusBottomStart="8dp"
-        app:boxCornerRadiusBottomEnd="8dp"
-        app:boxCornerRadiusTopStart="8dp"
-        app:boxCornerRadiusTopEnd="8dp"
-        app:boxStrokeColor="@color/red"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintTop_toBottomOf="@+id/tv_jenis_aksi"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
-
-        <AutoCompleteTextView
-            android:id="@+id/autoCompleteTextViewJenisAksi"
+        <TextView
+            android:id="@+id/tv_jenis_aksi"
             android:layout_width="match_parent"
-            android:layout_height="52dp"
-            android:inputType="none"
-            android:hint="Pilih Jenis Laporan"
-            android:focusableInTouchMode="false"/>
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Jenis Laporan"
+            android:textColor="@color/title_black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@+id/jumlah_ternak_layout"
+            tools:layout_editor_absoluteX="20dp" />
 
-    <TextView
-        android:id="@+id/tv_keterangan"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Keterangan Laporan"
-        android:textColor="@color/title_black"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@+id/jenis_aksi_layout"
-        tools:layout_editor_absoluteX="20dp" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/keterangan_layout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_marginTop="5dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:boxCornerRadiusBottomStart="8dp"
-        app:boxCornerRadiusBottomEnd="8dp"
-        app:boxCornerRadiusTopStart="8dp"
-        app:boxCornerRadiusTopEnd="8dp"
-        app:boxStrokeColor="@color/red"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_keterangan">
-
-        <EditText
-            android:id="@+id/ed_keterangan"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/jenis_aksi_layout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:ems="40"
-            android:hint="Rincikan keluhan/permintaan"
-            android:importantForAutofill="no"
-            android:inputType="text"
-            tools:ignore="SpeakableTextPresentCheck,TextFields" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            app:boxCornerRadiusBottomEnd="8dp"
+            app:boxCornerRadiusBottomStart="8dp"
+            app:boxCornerRadiusTopEnd="8dp"
+            app:boxCornerRadiusTopStart="8dp"
+            app:boxStrokeColor="@color/red"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_jenis_aksi">
 
-    <TextView
-        android:id="@+id/tv_alamat"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Lokasi Pelaporan"
-        android:textColor="@color/title_black"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@+id/keterangan_layout"
-        tools:layout_editor_absoluteX="20dp" />
+            <AutoCompleteTextView
+                android:id="@+id/autoCompleteTextViewJenisAksi"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:focusableInTouchMode="false"
+                android:hint="Pilih Jenis Laporan"
+                android:inputType="none" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <TextView
-        android:id="@+id/tv_alamat_desc"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="Isikan detail lokasi tempat laporan dibuat"
-        android:textSize="12sp"
-        app:layout_constraintTop_toBottomOf="@+id/tv_alamat"/>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/alamat_layout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_marginTop="5dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:boxCornerRadiusBottomStart="8dp"
-        app:boxCornerRadiusBottomEnd="8dp"
-        app:boxCornerRadiusTopStart="8dp"
-        app:boxCornerRadiusTopEnd="8dp"
-        app:boxStrokeColor="@color/red"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_alamat_desc">
-
-        <EditText
-            android:id="@+id/ed_alamat"
+        <TextView
+            android:id="@+id/tv_keterangan"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:ems="40"
-            android:hint="Nomor peternakan, nama jalan, kelurahan"
-            android:importantForAutofill="no"
-            android:inputType="text"
-            tools:ignore="SpeakableTextPresentCheck,TextFields" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Keterangan Laporan"
+            android:textColor="@color/title_black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@+id/jenis_aksi_layout"
+            tools:layout_editor_absoluteX="20dp" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_send"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="@drawable/button_background"
-        android:text="Kirim"
-        android:textAllCaps="false"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:textColor="@color/white"
-        app:cornerRadius="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:ignore="MissingConstraints"/>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/keterangan_layout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            app:boxCornerRadiusBottomEnd="8dp"
+            app:boxCornerRadiusBottomStart="8dp"
+            app:boxCornerRadiusTopEnd="8dp"
+            app:boxCornerRadiusTopStart="8dp"
+            app:boxStrokeColor="@color/red"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_keterangan">
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        style="?android:attr/progressBarStyle"
-        tools:visibility="gone"/>
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <EditText
+                android:id="@+id/ed_keterangan"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:ems="40"
+                android:hint="Rincikan keluhan/permintaan"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                tools:ignore="SpeakableTextPresentCheck,TextFields" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/tv_alamat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Lokasi Pelaporan"
+            android:textColor="@color/title_black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@+id/keterangan_layout"
+            tools:layout_editor_absoluteX="20dp" />
+
+        <TextView
+            android:id="@+id/tv_alamat_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="Isikan detail lokasi tempat laporan dibuat"
+            android:textSize="12sp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_alamat" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/alamat_layout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            app:boxCornerRadiusBottomEnd="8dp"
+            app:boxCornerRadiusBottomStart="8dp"
+            app:boxCornerRadiusTopEnd="8dp"
+            app:boxCornerRadiusTopStart="8dp"
+            app:boxStrokeColor="@color/red"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_alamat_desc">
+
+            <EditText
+                android:id="@+id/ed_alamat"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:ems="40"
+                android:hint="Nomor peternakan, nama jalan, kelurahan"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                tools:ignore="SpeakableTextPresentCheck,TextFields" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_send"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/button_background"
+            android:text="Kirim"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:cornerRadius="10dp"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="gone" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
