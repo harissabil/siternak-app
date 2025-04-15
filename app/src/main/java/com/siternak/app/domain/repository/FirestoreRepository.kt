@@ -15,9 +15,9 @@ interface FirestoreRepository {
 
     fun getAllPosts(): Flow<Result<List<Post>>>
 
-    suspend fun getPostById(postId: String): Result<Post>
+    suspend fun getPostById(id: String): Result<Post>
 
     suspend fun updatePost(post: Post): Result<Boolean>
 
-    suspend fun deletePost(postId: String): Result<Boolean>
+    suspend fun deletePost(id: String): Result<Boolean>
 }

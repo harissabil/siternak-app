@@ -3,8 +3,8 @@ package com.siternak.app.domain.model
 import com.google.firebase.Timestamp
 
 data class Post(
-    val postId: String,
-    val uid: String,
+    val id: String? = null,
+    val uid: String? = null,
     val jenisTernak: String,
     val jumlahTernak: String,
     val jenisAksi: String,
@@ -12,8 +12,8 @@ data class Post(
     val alamatAksi: String,
     val latitude: Double?,
     val longitude: Double?,
-    val createdAt: Timestamp?,
-    val updatedAt: Timestamp?,
-    val petugas: String?,
-    val status: String?,
+    val createdAt: Timestamp? = null,
+    val updatedAt: Timestamp? = null,
+    val petugas: String? = null,
+    val status: String? = null,
 )
