@@ -9,13 +9,11 @@ import com.siternak.app.domain.model.Post
 @Keep
 data class PostResponse(
     @DocumentId
-    @get:PropertyName("post_id")
-    @set:PropertyName("post_id")
-    var postId: String = "",
+    val id: String? = null,
 
     @get:PropertyName("user_id")
     @set:PropertyName("user_id")
-    var uid: String = "",
+    var uid: String? = "",
 
     @get:PropertyName("jenis_ternak")
     @set:PropertyName("jenis_ternak")
@@ -54,7 +52,7 @@ data class PostResponse(
     val status: String? = null,
 ) {
     fun toPost() = Post(
-        postId = postId,
+        id = id,
         uid = uid,
         jenisTernak = jenisTernak,
         jumlahTernak = jumlahTernak,

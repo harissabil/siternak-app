@@ -10,13 +10,11 @@ import com.siternak.app.domain.model.Post
 @Keep
 data class PostRequest(
     @DocumentId
-    @get:PropertyName("post_id")
-    @set:PropertyName("post_id")
-    var postId: String? = "",
+    val id: String? = null,
 
     @get:PropertyName("user_id")
     @set:PropertyName("user_id")
-    var uid: String = "",
+    var uid: String? = "",
 
     @get:PropertyName("jenis_ternak")
     @set:PropertyName("jenis_ternak")
@@ -55,7 +53,7 @@ data class PostRequest(
     val status: String? = null,
 ) {
     fun toPostResponse() = PostResponse(
-        postId = postId.toString(),
+        id = id,
         uid = uid,
         jenisTernak = jenisTernak,
         jumlahTernak = jumlahTernak,
@@ -72,7 +70,7 @@ data class PostRequest(
 }
 
 internal fun Post.toPostRequest() = PostRequest(
-    postId = postId,
+    id = id,
     uid = uid,
     jenisTernak = jenisTernak,
     jumlahTernak = jumlahTernak,

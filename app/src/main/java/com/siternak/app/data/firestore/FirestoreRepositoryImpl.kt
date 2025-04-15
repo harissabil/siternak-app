@@ -56,6 +56,7 @@ class FirestoreRepositoryImpl(
             postRef.add(
                 postRequest.toPostResponse().copy(
                     uid = auth.currentUser?.uid.toString(),
+                    createdAt = Timestamp.now(),
                 )
             ).await()
             Result.success(true)
@@ -103,10 +104,10 @@ class FirestoreRepositoryImpl(
         }
     }
 
-    override suspend fun getPostById(postId: String): Result<Post> =
+    override suspend fun getPostById(id: String): Result<Post> =
         try {
-            val snapshot = postRef.whereEqualTo("post_id", postId).get().await()
-            val postResponse = snapshot.toObjects(PostResponse::class.java).firstOrNull()
+            val snapshot = postRef.document(id).get().await()
+            val postResponse = snapshot.toObject(PostResponse::class.java)
             if (postResponse != null) {
                 Result.success(postResponse.toPost())
             } else {
@@ -120,7 +121,7 @@ class FirestoreRepositoryImpl(
     override suspend fun updatePost(post: Post): Result<Boolean> =
         try {
             val postRequest = post.toPostRequest()
-            postRef.document(postRequest.postId!!).set(
+            postRef.document(postRequest.id!!).set(
                 postRequest.toPostResponse().copy(
                     updatedAt = Timestamp.now()
                 )
@@ -131,9 +132,9 @@ class FirestoreRepositoryImpl(
             Result.failure(e)
         }
 
-    override suspend fun deletePost(postId: String): Result<Boolean> =
+    override suspend fun deletePost(id: String): Result<Boolean> =
         try {
-            postRef.document(postId).delete().await()
+            postRef.document(id).delete().await()
             Result.success(true)
         } catch (e: Exception) {
             e.printStackTrace()
