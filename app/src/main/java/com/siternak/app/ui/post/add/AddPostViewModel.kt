@@ -4,19 +4,17 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.siternak.app.data.response.PostDataClass
-import com.siternak.app.data.response.PostResponse
-import com.siternak.app.data.response.UpdatePostDataClass
-import com.siternak.app.data.retrofit.ApiConfig
-import com.google.gson.Gson
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import androidx.lifecycle.viewModelScope
+import com.siternak.app.domain.model.Post
+import com.siternak.app.domain.repository.FirestoreRepository
+import kotlinx.coroutines.launch
 
-class AddPostViewModel : ViewModel() {
+class AddPostViewModel(
+    private val firestoreRepository: FirestoreRepository,
+) : ViewModel() {
 
-    private val _post = MutableLiveData<PostResponse?>()
-    val post: LiveData<PostResponse?> = _post
+    private val _post = MutableLiveData<Post?>()
+    val post: LiveData<Post?> = _post
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -24,82 +22,88 @@ class AddPostViewModel : ViewModel() {
     private val _message = MutableLiveData<String?>()
     val message: LiveData<String?> = _message
 
-    fun loadPostDetails(token: String, postId: String) {
+    fun loadPostDetails(postId: String) = viewModelScope.launch {
         _isLoading.value = true
-        val apiService = ApiConfig.getApiService()
-        val call = apiService.getPostById("Bearer $token", postId)
 
-        call.enqueue(object : Callback<PostResponse> {
-            override fun onResponse(call: Call<PostResponse>, response: Response<PostResponse>) {
-                _isLoading.value = false
-                if (response.isSuccessful) {
-                    _post.value = response.body()
-                } else {
-                    _message.value = "Gagal memuat data"
-                }
-            }
-
-            override fun onFailure(call: Call<PostResponse>, t: Throwable) {
-                _isLoading.value = false
-                _message.value = "Gagal memuat data: ${t.message}"
-            }
-        })
+        val postDetailResult = firestoreRepository.getPostById(postId)
+        postDetailResult.onSuccess {
+            _isLoading.value = false
+            _post.value = it
+        }.onFailure { exception ->
+            Log.e("AddPostViewModel", "Error fetching post details: ${exception.message}")
+            _message.value = "Gagal memuat data dari Firestore"
+            _isLoading.value = false
+        }
     }
 
-    fun addNewPost(token: String, jenisTernak: String, jumlahTernak: String, jenisAksi: String, keteranganAksi: String, alamatAksi: String, latitude: String, longitude: String) {
+    fun addNewPost(
+        jenisTernak: String,
+        jumlahTernak: String,
+        jenisAksi: String,
+        keteranganAksi: String,
+        alamatAksi: String,
+        latitude: Double,
+        longitude: Double,
+    ) = viewModelScope.launch {
         _isLoading.value = true
-        val apiService = ApiConfig.getApiService()
-        val postData = PostDataClass(jenisTernak, jumlahTernak, jenisAksi, keteranganAksi, alamatAksi, latitude, longitude)
-        Log.d("AddPostViewModel", "Preparing to add new post: $postData")
 
-        val call = apiService.addPost("Bearer $token", postData)
+        val addNewPostResult = firestoreRepository.addPost(
+            post = Post(
+                jenisTernak = jenisTernak,
+                jumlahTernak = jumlahTernak,
+                jenisAksi = jenisAksi,
+                keteranganAksi = keteranganAksi,
+                alamatAksi = alamatAksi,
+                latitude = latitude,
+                longitude = longitude,
+            )
+        )
 
-        call.enqueue(object : Callback<PostResponse> {
-            override fun onResponse(call: Call<PostResponse>, response: Response<PostResponse>) {
-                _isLoading.value = false
-                if (response.isSuccessful) {
-                    _message.value = "Data berhasil ditambahkan"
-                } else {
-                    response.errorBody()?.let { errorBody ->
-                        try {
-                            val errorResponse = Gson().fromJson(errorBody.string(), PostResponse::class.java)
-                            _message.value = "Gagal menambahkan data: ${errorResponse.message}"
-                        } catch (e: Exception) {
-                            e.printStackTrace()
-                            _message.value = "Gagal menambahkan data"
-                        }
-                    } ?: run {
-                        _message.value = "Gagal menambahkan data"
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<PostResponse>, t: Throwable) {
-                _isLoading.value = false
-                _message.value = "Gagal menambahkan data: ${t.message}"
-            }
-        })
+        addNewPostResult.onSuccess {
+            _isLoading.value = false
+            _message.value = "Data berhasil ditambahkan"
+        }.onFailure { exception ->
+            Log.e("AddPostViewModel", "Error adding new post: ${exception.message}")
+            _message.value = "Gagal menambahkan data ke Firestore"
+            _isLoading.value = false
+        }
     }
 
-    fun updatePost(token: String, postId: String, jenisTernak: String, jumlahTernak: String, jenisAksi: String, keteranganAksi: String, alamatAksi: String) {
+    fun updatePost(
+        postId: String,
+        jenisTernak: String,
+        jumlahTernak: String,
+        jenisAksi: String,
+        keteranganAksi: String,
+        alamatAksi: String,
+    ) = viewModelScope.launch {
         _isLoading.value = true
-        val apiService = ApiConfig.getApiService()
-        val call = apiService.updatePost("Bearer $token", postId, UpdatePostDataClass(jenisTernak, jumlahTernak, jenisAksi, keteranganAksi, alamatAksi))
 
-        call.enqueue(object : Callback<PostResponse> {
-            override fun onResponse(call: Call<PostResponse>, response: Response<PostResponse>) {
-                _isLoading.value = false
-                if (response.isSuccessful) {
-                    _message.value = "Data berhasil diperbarui"
-                } else {
-                    _message.value = "Gagal memperbarui data"
-                }
-            }
+        val updatePostResult = firestoreRepository.updatePost(
+            post = Post(
+                jenisTernak = jenisTernak,
+                jumlahTernak = jumlahTernak,
+                jenisAksi = jenisAksi,
+                keteranganAksi = keteranganAksi,
+                alamatAksi = alamatAksi,
+                id = postId,
+                uid = _post.value!!.uid,
+                latitude = _post.value!!.latitude,
+                longitude = _post.value!!.longitude,
+                createdAt = _post.value!!.createdAt,
+                updatedAt = _post.value!!.updatedAt,
+                petugas = _post.value!!.petugas,
+                status = _post.value!!.status,
+            )
+        )
 
-            override fun onFailure(call: Call<PostResponse>, t: Throwable) {
-                _isLoading.value = false
-                _message.value = "Gagal memperbarui data: ${t.message}"
-            }
-        })
+        updatePostResult.onSuccess {
+            _isLoading.value = false
+            _message.value = "Data berhasil diperbarui"
+        }.onFailure { exception ->
+            Log.e("AddPostViewModel", "Error updating post: ${exception.message}")
+            _message.value = "Gagal memperbarui data ke Firestore"
+            _isLoading.value = false
+        }
     }
 }

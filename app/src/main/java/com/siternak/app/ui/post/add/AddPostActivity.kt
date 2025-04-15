@@ -6,33 +6,34 @@ import android.R
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
+import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.graphics.Insets
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.setPadding
-import com.siternak.app.data.local.AuthPreference
-import com.siternak.app.databinding.ActivityAddPostBinding
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.siternak.app.databinding.ActivityAddPostBinding
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class AddPostActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddPostBinding
-    private val viewModel: AddPostViewModel by viewModels()
+    private val viewModel: AddPostViewModel by viewModel()
     private var postId: String? = null
     private var counterValue = 1
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
 
-    override fun onCreate(savedInstanceState: Bundle?){
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
         enableEdgeToEdge()
@@ -46,36 +47,35 @@ class AddPostActivity : AppCompatActivity() {
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
-        requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
-            if (isGranted) {
-                Toast.makeText(this, "Izin lokasi diberikan", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, "Izin lokasi ditolak", Toast.LENGTH_SHORT).show()
+        requestPermissionLauncher =
+            registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+                if (isGranted) {
+                    Toast.makeText(this, "Izin lokasi diberikan", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this, "Izin lokasi ditolak", Toast.LENGTH_SHORT).show()
+                }
             }
-        }
 
         postId = intent.getStringExtra("POST_ID")
 
-        // Cek token
-        val authPreference = AuthPreference(this)
-        val token = authPreference.getToken()
-        if (token !== null && postId != null) {
-            viewModel.loadPostDetails(token, postId!!)
+        // Load post details if postId is not null
+        if (postId != null) {
+            viewModel.loadPostDetails(postId!!)
         }
 
         // Binding layout
         viewModel.post.observe(this) { post ->
             post?.let {
-                binding.autoCompleteTextViewJenisTernak.setText(it.data.jenisTernak, false)
-                binding.jumlahTernakLayout.editText?.setText(it.data.jumlahTernak.toString())
-                binding.autoCompleteTextViewJenisAksi.setText(it.data.jenisAksi, false)
-                binding.keteranganLayout.editText?.setText(it.data.keteranganAksi)
-                binding.alamatLayout.editText?.setText(it.data.alamatAksi)
+                binding.autoCompleteTextViewJenisTernak.setText(it.jenisTernak, false)
+                binding.jumlahTernakLayout.editText?.setText(it.jumlahTernak.toString())
+                binding.autoCompleteTextViewJenisAksi.setText(it.jenisAksi, false)
+                binding.keteranganLayout.editText?.setText(it.keteranganAksi)
+                binding.alamatLayout.editText?.setText(it.alamatAksi)
             }
         }
 
         viewModel.isLoading.observe(this) { isLoading ->
-            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            showLoading(isLoading)
         }
 
         viewModel.message.observe(this) { message ->
@@ -87,46 +87,77 @@ class AddPostActivity : AppCompatActivity() {
             }
         }
 
-        binding.btnBack.setOnClickListener{
+        binding.btnBack.setOnClickListener {
             finish()
         }
 
-        binding.btnSend.setOnClickListener{
-            val jenisTernak = binding.autoCompleteTextViewJenisTernak.text.toString().trim()
-            val jumlahTernak = counterValue.toString()
-            val jenisAksi = binding.autoCompleteTextViewJenisAksi.text.toString().trim()
-            val keteranganAksi = binding.keteranganLayout.editText?.text.toString().trim()
-            val alamatAksi = binding.alamatLayout.editText?.text.toString().trim()
+        binding.btnSend.setOnClickListener {
+            hideKeyboard(it)
 
-            if (ActivityCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                requestLocationPermission()
-                return@setOnClickListener
+            fun EditText.isEmpty(): Boolean {
+                return this.text.toString().isEmpty()
             }
 
-            fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-                location?.let {
-                    // ambil long dan lat, ubah ke string karena tipe data long & lat yang diminta pada backend adalah string
-                    val latitude = it.latitude.toString()
-                    val longitude = it.longitude.toString()
+            fun areAllFieldsFilled(vararg fields: EditText): Boolean {
+                return fields.all { !it.isEmpty() }
+            }
 
-                    // menentukan fungsi yang akan dipanggil pada viewmodel
-                    // jika postId tidak null, maka fungsi updatePost dipanggil
-                    // jika postId null maka fungsi addNewPost dipanggil
-                    if (token != null) {
+            if (!areAllFieldsFilled(
+                    binding.autoCompleteTextViewJenisTernak,
+                    binding.autoCompleteTextViewJenisAksi,
+                    binding.keteranganLayout.editText!!,
+                    binding.alamatLayout.editText!!
+                )
+            ) {
+                showFailedDialog("Pastikan semua data terisi!")
+            } else {
+                val jenisTernak = binding.autoCompleteTextViewJenisTernak.text.toString().trim()
+                val jumlahTernak = counterValue.toString()
+                val jenisAksi = binding.autoCompleteTextViewJenisAksi.text.toString().trim()
+                val keteranganAksi = binding.keteranganLayout.editText?.text.toString().trim()
+                val alamatAksi = binding.alamatLayout.editText?.text.toString().trim()
+
+                if (ActivityCompat.checkSelfPermission(
+                        this,
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                    ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                        this,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    requestLocationPermission()
+                    return@setOnClickListener
+                }
+
+                fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+                    location?.let {
+                        // ambil long dan lat
+                        val latitude = it.latitude
+                        val longitude = it.longitude
+
+                        // menentukan fungsi yang akan dipanggil pada viewmodel
+                        // jika postId tidak null, maka fungsi updatePost dipanggil
+                        // jika postId null maka fungsi addNewPost dipanggil
                         if (postId != null) {
-                            viewModel.updatePost(token, postId!!, jenisTernak, jumlahTernak, jenisAksi, keteranganAksi, alamatAksi)
+                            viewModel.updatePost(
+                                postId!!,
+                                jenisTernak,
+                                jumlahTernak,
+                                jenisAksi,
+                                keteranganAksi,
+                                alamatAksi
+                            )
                         } else {
-                            viewModel.addNewPost(token, jenisTernak, jumlahTernak, jenisAksi, keteranganAksi, alamatAksi, latitude, longitude)
+                            viewModel.addNewPost(
+                                jenisTernak,
+                                jumlahTernak,
+                                jenisAksi,
+                                keteranganAksi,
+                                alamatAksi,
+                                latitude,
+                                longitude
+                            )
                         }
-                    } else {
-                        Toast.makeText(this, "Gagal mendapatkan lokasi", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -147,10 +178,21 @@ class AddPostActivity : AppCompatActivity() {
 
     private fun initializeDropdowns() {
         // atur manual tipe yang akan ditampilkan di dropdown
-        val jenisTernakArray = arrayOf("Sapi", "Kambing", "Domba", "Kerbau", "Kuda", "Babi", "Ayam", "Bebek", "Lainnya")
+        val jenisTernakArray = arrayOf(
+            "Sapi",
+            "Kambing",
+            "Domba",
+            "Kerbau",
+            "Kuda",
+            "Babi",
+            "Ayam",
+            "Bebek",
+            "Lainnya"
+        )
         val jenisAksiArray = arrayOf("Pelaporan Penyakit", "Permintaan Vaksin")
 
-        val ternakAdapter = ArrayAdapter(this, R.layout.simple_dropdown_item_1line, jenisTernakArray)
+        val ternakAdapter =
+            ArrayAdapter(this, R.layout.simple_dropdown_item_1line, jenisTernakArray)
         binding.autoCompleteTextViewJenisTernak.setAdapter(ternakAdapter)
         val aksiAdapter = ArrayAdapter(this, R.layout.simple_dropdown_item_1line, jenisAksiArray)
         binding.autoCompleteTextViewJenisAksi.setAdapter(aksiAdapter)
@@ -167,6 +209,26 @@ class AddPostActivity : AppCompatActivity() {
         binding.btnIncrease.setOnClickListener {
             counterValue++
             binding.tvCounter.text = counterValue.toString()
+        }
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    private fun hideKeyboard(view: View) {
+        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(view.windowToken, 0)
+    }
+
+    private fun showFailedDialog(message: String) {
+        showLoading(false)
+        AlertDialog.Builder(this).apply {
+            setTitle("Failed")
+            setMessage(message)
+            setPositiveButton("Continue") { dialog, _ -> dialog.dismiss() }
+            create()
+            show()
         }
     }
 }

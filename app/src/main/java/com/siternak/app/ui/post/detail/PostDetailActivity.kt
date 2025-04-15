@@ -5,25 +5,23 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.Insets
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.siternak.app.data.local.AuthPreference
-import com.siternak.app.data.response.PostResponse
+import com.siternak.app.core.utils.toDateYyyyMmDd
 import com.siternak.app.databinding.ActivityDetailPostBinding
+import com.siternak.app.domain.model.Post
 import com.siternak.app.ui.post.add.AddPostActivity
-import com.siternak.app.core.utils.DateUtils
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PostDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailPostBinding
-    private val viewModel: PostDetailViewModel by viewModels()
+    private val viewModel: PostDetailViewModel by viewModel()
     private var postId: String? = null
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
-    private var token: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +45,6 @@ class PostDetailActivity : AppCompatActivity() {
         // enable refresh layout (supaya bisa di-swipe ke bawah untuk refresh)
         swipeRefreshLayout = binding.swipeRefreshLayout
         postId = intent.getStringExtra("POST_ID")
-        token = AuthPreference(this).getToken()
     }
 
     // update adapter apabila sudah ada data baru
@@ -69,8 +66,8 @@ class PostDetailActivity : AppCompatActivity() {
     }
 
     private fun loadPostDetails() {
-        if (token != null && postId != null) {
-            viewModel.loadPostDetails(token!!, postId!!)
+        if (postId != null) {
+            viewModel.loadPostDetails(postId!!)
         }
     }
 
@@ -85,7 +82,7 @@ class PostDetailActivity : AppCompatActivity() {
         }
 
         binding.btnDelete.setOnClickListener {
-            postId?.let { id -> viewModel.deletePost(token!!, id) }
+            postId?.let { id -> viewModel.deletePost(id) }
         }
 
         // aktivitas edit menggunakan layout yang sama dengan activity_add_post
@@ -100,16 +97,16 @@ class PostDetailActivity : AppCompatActivity() {
         supportActionBar?.hide()
     }
 
-    private fun updateUI(post: PostResponse) {
+    private fun updateUI(post: Post) {
         binding.apply {
-            edPetugas.text = post.data.petugas
-            edJenisTernak.text = post.data.jenisTernak
-            edJumlahTernak.text = post.data.jumlahTernak.toString()
-            edJenisAksi.text = post.data.jenisAksi
-            edKeteranganAksi.text = post.data.keteranganAksi
-            edAlamatAksi.text = post.data.alamatAksi
-            edTanggal.text = DateUtils.formatDate(post.data.createdAt)
-            edStatus.text = post.data.status
+            edPetugas.text = post.petugas ?: "-"
+            edJenisTernak.text = post.jenisTernak
+            edJumlahTernak.text = post.jumlahTernak.toString()
+            edJenisAksi.text = post.jenisAksi
+            edKeteranganAksi.text = post.keteranganAksi
+            edAlamatAksi.text = post.alamatAksi
+            edTanggal.text = post.createdAt?.toDateYyyyMmDd()
+            edStatus.text = post.status ?: "-"
         }
     }
 
