@@ -44,7 +44,8 @@
         <activity
             android:name=".ui.post.add.AddPostActivity"
             android:exported="true"
-            android:theme="@style/App.Starting.Theme" />
+            android:theme="@style/App.Starting.Theme"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".ui.post.detail.PostDetailActivity"
             android:exported="false"
