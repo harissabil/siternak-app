@@ -7,10 +7,10 @@
 3. Aktifkan Firebase Authentication dan tambahkan metode login dengan Email/Password dan Google.
 4. Aktifkan Firestore Database.
 5. Download file `google-services.json` dari Firebase Console dan letakkan di dalam folder `app/` proyek.
-6. Buka `local.properties` dan tambahkan `WEB_CLIENT_ID` yang didapatkan dari Web SDK Configutation untuk Google Authentication pada Firebase Console.
-   ```android
-   ...
-   
-   WEB_CLIENT_ID=<YOUR_WEB_CLIENT_ID>
-   ```
+6. Buka `local.properties` dan tambahkan `WEB_CLIENT_ID` yang didapatkan dari Web SDK Configutation untuk Google Authentication pada Firebase Console seperti di bawah ini.
+```android
+...
+
+WEB_CLIENT_ID=<YOUR_WEB_CLIENT_ID>
+```
 7. Sinkronisasi proyek dengan Gradle dan jalankan aplikasi melalui Emulator atau Device langsung.
