@@ -1,26 +1,18 @@
 package com.siternak.app.ui.home
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.siternak.app.data.response.ListPostLoc
-import com.siternak.app.data.response.PostLoc
-import com.siternak.app.data.retrofit.ApiConfig
+import com.siternak.app.domain.model.Post
 import com.siternak.app.domain.repository.FirestoreRepository
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class HomeViewModel(
     private val firestoreRepository: FirestoreRepository
 ) : ViewModel() {
-    private val _posts = MutableLiveData<List<PostLoc>>()
-    val posts: LiveData<List<PostLoc>> = _posts
+    private val _posts = MutableLiveData<List<Post>>()
+    val posts: LiveData<List<Post>> = _posts
 
     private val _userName = MutableLiveData<String>()
     val userName: LiveData<String> get() = _userName
@@ -34,44 +26,45 @@ class HomeViewModel(
     private val _isFormUserAlreadyFilled = MutableLiveData<Boolean>(true)
     val isFormUserAlreadyFilled: LiveData<Boolean> = _isFormUserAlreadyFilled
 
-    init {
-        loadUserName()
-    }
+    private var isDataInitialized = false
 
-    fun loadUserName() = viewModelScope.launch {
-        val userData = firestoreRepository.getUserData()
-        userData.onSuccess {
-            if (it == null) {
-                _isFormUserAlreadyFilled.value = false
-                return@onSuccess
-            } else {
-                _userName.value = it.nama
+    fun loadUserName() {
+        if (_userName.value != null) return // Skip if already loaded
+
+        viewModelScope.launch {
+            val userData = firestoreRepository.getUserData()
+            userData.onSuccess {
+                if (it == null) {
+                    _isFormUserAlreadyFilled.value = false
+                } else {
+                    _userName.value = it.nama
+                    if (!isDataInitialized) {
+                        getAllPostsWithLoc()
+                    }
+                }
+            }.onFailure {
+                _message.value = "Gagal memuat data pengguna: ${it.message}"
             }
-        }.onFailure {
-            _message.value = "Gagal memuat data pengguna: ${it.message}"
         }
     }
 
-    fun getAllPostsWithLoc(token: String) {
-        _isLoading.value = true
-        val apiService = ApiConfig.getApiService()
-        val call = apiService.getAllPosts("Bearer $token")
+    fun getAllPostsWithLoc() {
+        // Skip loading if already fetching or already have data
+        if (_isLoading.value == true || (!_posts.value.isNullOrEmpty() && isDataInitialized)) return
 
-        call.enqueue(object : Callback<ListPostLoc> {
-            override fun onResponse(call: Call<ListPostLoc>, response: Response<ListPostLoc>) {
-                _isLoading.value = false
-                if (response.isSuccessful) {
-                    val apiResponse = response.body()
-                    _posts.value = apiResponse?.data
-                } else {
-                    _message.value = "Gagal memuat data: ${response.errorBody()?.string()}"
+        isDataInitialized = true
+        _isLoading.value = true
+
+        viewModelScope.launch {
+            firestoreRepository.getAllPosts().collect { response ->
+                response.onSuccess {
+                    _posts.value = it
+                    _isLoading.value = false
+                }.onFailure {
+                    _message.value = "Gagal memuat data: ${it.message}"
+                    _isLoading.value = false
                 }
             }
-
-            override fun onFailure(call: Call<ListPostLoc>, t: Throwable) {
-                _isLoading.value = false
-                _message.value = "Gagal memuat data: ${t.message}"
-            }
-        })
+        }
     }
 }
