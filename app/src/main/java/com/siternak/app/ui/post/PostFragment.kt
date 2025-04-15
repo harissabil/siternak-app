@@ -10,27 +10,32 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.siternak.app.core.adapter.PostAdapter
+import com.siternak.app.core.utils.NavigationUtils
 import com.siternak.app.data.local.AuthPreference
 import com.siternak.app.databinding.FragmentPostBinding
+import com.siternak.app.domain.repository.AuthRepository
 import com.siternak.app.ui.post.add.AddPostActivity
 import com.siternak.app.ui.post.detail.PostDetailActivity
-import com.siternak.app.core.utils.NavigationUtils
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import kotlin.getValue
 
 class PostFragment : Fragment() {
     private lateinit var postDetailLauncher: ActivityResultLauncher<Intent>
     private var _binding: FragmentPostBinding? = null
-    private val viewModel: PostViewModel by viewModels()
+    private val viewModel: PostViewModel by viewModel()
     private val binding get() = _binding!!
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
+
+    private val authRepository: AuthRepository by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentPostBinding.inflate(inflater, container, false)
         return binding.root
@@ -85,32 +90,27 @@ class PostFragment : Fragment() {
     private fun setupSwipeRefreshLayout() {
         swipeRefreshLayout = binding.swipeRefreshLayout
         swipeRefreshLayout.setOnRefreshListener {
-            reloadPosts()
-        }
-    }
-
-    private fun reloadPosts() {
-        AuthPreference(requireContext()).getToken()?.let {
-            viewModel.reloadPosts(it)
+            viewModel.reloadPosts()
         }
     }
 
     private fun setupPostDetailLauncher() {
-        postDetailLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == AppCompatActivity.RESULT_OK) {
-                result.data?.getBooleanExtra("NEEDS_RELOAD", false)?.let {
-                    if (it) reloadPosts()
+        postDetailLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == AppCompatActivity.RESULT_OK) {
+                    result.data?.getBooleanExtra("NEEDS_RELOAD", false)?.let {
+                        if (it) viewModel.reloadPosts()
+                    }
                 }
             }
-        }
     }
 
     private fun checkAuthAndLoadPosts() {
-        val token = AuthPreference(requireContext()).getToken()
-        if (token.isNullOrEmpty()) {
+        val isLoggedIn = authRepository.isUserLoggedIn()
+        if (!isLoggedIn) {
             NavigationUtils.navigateToLogin(requireContext())
         } else {
-            viewModel.loadPosts(token)
+            viewModel.loadPosts()
         }
     }
 
