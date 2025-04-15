@@ -1,5 +1,6 @@
 package com.siternak.app.core.utils
 
+import com.google.firebase.Timestamp
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -17,4 +18,10 @@ object DateUtils {
 
         return desiredFormat.format(date)
     }
+}
+
+fun Timestamp.toDateYyyyMmDd(): String {
+    val date = this.toDate()
+    val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    return sdf.format(date)
 }
