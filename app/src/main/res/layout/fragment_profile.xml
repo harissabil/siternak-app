@@ -11,8 +11,9 @@
         android:id="@+id/iv_pengguna"
         android:layout_width="63dp"
         android:layout_height="63dp"
-        android:layout_marginStart="20dp"
         android:layout_marginVertical="20dp"
+        android:layout_marginStart="20dp"
+        android:src="@drawable/blank_profile"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints"
@@ -20,13 +21,15 @@
 
     <TextView
         android:id="@+id/tv_nama_pengguna"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="18dp"
-        android:text="User Name"
-        android:textStyle="bold"
+        android:layout_marginEnd="20dp"
+        tools:text="User Name"
         android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/iv_pengguna"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/iv_pengguna"
         app:layout_constraintTop_toTopOf="@+id/iv_pengguna"
         tools:ignore="MissingConstraints" />
@@ -37,7 +40,7 @@
         android:layout_height="5dp"
         android:layout_marginTop="20dp"
         android:background="@color/cream"
-        app:layout_constraintTop_toBottomOf="@id/iv_pengguna"/>
+        app:layout_constraintTop_toBottomOf="@id/iv_pengguna" />
 
     <TextView
         android:id="@+id/tv_data_pengguna"
@@ -57,11 +60,11 @@
         android:id="@+id/view1"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="20dp"
         android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
         android:background="@color/greyish"
-        app:layout_constraintTop_toBottomOf="@id/tv_data_pengguna"/>
+        app:layout_constraintTop_toBottomOf="@id/tv_data_pengguna" />
 
     <TextView
         android:id="@+id/tv_atur_sandi"
@@ -71,20 +74,20 @@
         android:layout_marginVertical="20dp"
         android:text="   Atur Kata Sandi"
         android:textSize="16sp"
+        app:drawableStartCompat="@drawable/baseline_password_24"
         app:layout_constraintStart_toEndOf="@drawable/baseline_password_24"
         app:layout_constraintTop_toBottomOf="@id/view1"
-        app:drawableStartCompat="@drawable/baseline_password_24"
         tools:ignore="MissingConstraints" />
 
     <View
         android:id="@+id/view2"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="20dp"
         android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
         android:background="@color/greyish"
-        app:layout_constraintTop_toBottomOf="@id/tv_atur_sandi"/>
+        app:layout_constraintTop_toBottomOf="@id/tv_atur_sandi" />
 
     <TextView
         android:id="@+id/tv_bantuan"
@@ -104,11 +107,11 @@
         android:id="@+id/view3"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="20dp"
         android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
         android:background="@color/greyish"
-        app:layout_constraintTop_toBottomOf="@id/tv_bantuan"/>
+        app:layout_constraintTop_toBottomOf="@id/tv_bantuan" />
 
     <TextView
         android:id="@+id/btn_logout"
@@ -117,8 +120,8 @@
         android:layout_marginHorizontal="20dp"
         android:layout_marginVertical="20dp"
         android:text="   Keluar"
-        android:textSize="16sp"
         android:textColor="@color/red"
+        android:textSize="16sp"
         app:drawableStartCompat="@drawable/baseline_logout_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@drawable/baseline_help_24"
@@ -128,13 +131,14 @@
     <ImageView
         android:layout_width="350dp"
         android:layout_height="300dp"
-        android:src="@drawable/illus_sapi"
         android:alpha="0.3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        android:src="@drawable/illus_sapi"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <ProgressBar
         android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
@@ -142,6 +146,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        style="?android:attr/progressBarStyle"
         tools:visibility="gone" />
 </androidx.constraintlayout.widget.ConstraintLayout>
