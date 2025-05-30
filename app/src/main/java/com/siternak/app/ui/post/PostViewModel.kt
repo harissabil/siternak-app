@@ -4,15 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.siternak.app.data.response.ListPostItem
-import com.siternak.app.data.response.PostItem
-import com.siternak.app.data.retrofit.ApiConfig
 import com.siternak.app.domain.model.Post
 import com.siternak.app.domain.repository.FirestoreRepository
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class PostViewModel(
     private val firestoreRepository: FirestoreRepository
