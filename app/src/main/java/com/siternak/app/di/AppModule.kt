@@ -6,6 +6,7 @@ val appModule = module {
     includes(
         authModule,
         firestoreModule,
-        viewModelModule
+        viewModelModule,
+        mlModule
     )
 }
