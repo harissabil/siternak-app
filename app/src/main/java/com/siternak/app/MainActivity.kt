@@ -1,7 +1,9 @@
 package com.siternak.app
 
+import android.R.attr.visibility
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -59,10 +61,20 @@ class MainActivity : AppCompatActivity() {
 
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigation_home, R.id.navigation_post, R.id.navigation_profile
+                R.id.navigation_home,
+                R.id.navigation_post,
+                R.id.navigation_pmk_detector,
+                R.id.navigation_profile
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            binding.navView.visibility = when (destination.id) {
+                R.id.navigation_scan -> View.GONE
+                else -> View.VISIBLE
+            }
+        }
     }
 }

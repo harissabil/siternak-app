@@ -12,6 +12,11 @@
         android:title="Laporan" />
 
     <item
+        android:id="@+id/navigation_pmk_detector"
+        android:icon="@drawable/icon_pmk"
+        android:title="PMK Detector" />
+
+    <item
         android:id="@+id/navigation_profile"
         android:icon="@drawable/icon_user"
         android:title="Profil" />

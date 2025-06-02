@@ -20,4 +20,18 @@
         android:name="com.siternak.app.ui.profile.ProfileFragment"
         android:label="ProfileFragment"
         tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/navigation_pmk_detector"
+        android:name="com.siternak.app.ui.pmk_detector.PmkDetectorFragment"
+        android:label="PmkDetectorFragment"
+        tools:layout="@layout/fragment_pmk_detector" >
+        <action
+            android:id="@+id/action_navigation_pmk_detector_to_scanFragment"
+            app:destination="@id/navigation_scan" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_scan"
+        android:name="com.siternak.app.ui.scan.ScanFragment"
+        android:label="ScanFragment"
+        tools:layout="@layout/fragment_scan" />
 </navigation>
