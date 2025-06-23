@@ -8,7 +8,9 @@ import com.siternak.app.ui.post.add.AddPostViewModel
 import com.siternak.app.ui.post.detail.PostDetailViewModel
 import com.siternak.app.ui.profile.ProfileViewModel
 import com.siternak.app.ui.profile.detail.ProfileDetailViewModel
+import com.siternak.app.ui.questionnaire.PmkQuestionnaireViewModel
 import com.siternak.app.ui.register.RegisterViewModel
+import com.siternak.app.ui.result.ResultViewModel
 import com.siternak.app.ui.scan.ScanViewModel
 import com.siternak.app.ui.user_form.UserFormViewModel
 import org.koin.androidx.viewmodel.dsl.viewModelOf
@@ -26,4 +28,6 @@ val viewModelModule = module {
     viewModelOf(::ProfileDetailViewModel)
     viewModelOf(::PmkDetectorViewModel)
     viewModelOf(::ScanViewModel)
+    viewModelOf(::PmkQuestionnaireViewModel)
+    viewModelOf(::ResultViewModel)
 }

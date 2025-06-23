@@ -7,6 +7,7 @@ import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.ContextCompat.startActivity
 import androidx.core.graphics.Insets
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.ViewCompat
@@ -20,6 +21,7 @@ import com.siternak.app.databinding.ActivityMainBinding
 import com.siternak.app.domain.repository.AuthRepository
 import com.siternak.app.ui.login.LoginActivity
 import org.koin.android.ext.android.inject
+import org.koin.java.KoinJavaComponent.inject
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -73,6 +75,8 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             binding.navView.visibility = when (destination.id) {
                 R.id.navigation_scan -> View.GONE
+                R.id.navigation_questionnaire -> View.GONE
+                R.id.navigation_result -> View.GONE
                 else -> View.VISIBLE
             }
         }

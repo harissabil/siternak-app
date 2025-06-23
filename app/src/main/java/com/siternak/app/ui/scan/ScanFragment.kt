@@ -32,6 +32,7 @@ import androidx.compose.material.icons.filled.FlashOn
 import androidx.compose.material.icons.filled.PhotoLibrary
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -60,6 +61,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.findNavController
 import com.siternak.app.core.theme.SiTernakTheme
 import com.siternak.app.databinding.FragmentScanBinding
 import kotlinx.coroutines.flow.collectLatest
@@ -100,18 +102,33 @@ class ScanFragment : Fragment() {
                         }
                     }
 
+                    LaunchedEffect(state.navigateToResult) {
+                        if (state.navigateToResult && state.detectionResult != null) {
+                            val action = ScanFragmentDirections.actionNavigationScanToNavigationResult(state.detectionResult!!)
+                            findNavController().navigate(action)
+                            viewModel.onResultNavigationHandled() // Reset trigger
+                        }
+                    }
+
                     Scaffold(
                         modifier = Modifier.fillMaxSize(),
                         snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
                     ) { innerPadding ->
-                        ScanScreen(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(innerPadding),
-                            viewModel = viewModel,
-                            cameraPreviewViewModel = cameraViewModel,
-                            lifecycleOwner = viewLifecycleOwner
-                        )
+                        Box(modifier = Modifier.fillMaxSize()) {
+                            ScanScreen(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(innerPadding),
+                                viewModel = viewModel,
+                                cameraPreviewViewModel = cameraViewModel,
+                                lifecycleOwner = viewLifecycleOwner
+                            )
+
+                            if(state.isLoading) {
+                                // Tampilkan Indikator Loading di sini
+                                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                            }
+                        }
                     }
                 }
             }
@@ -209,16 +226,28 @@ fun ScanScreen(
                 }
             },
             onCapture = {
+//                cameraPreviewViewModel.captureImage(context) { file ->
+//                    viewModel.onSetImageFile(currentStep, file)
+//                    // Otomatis lanjut ke step berikutnya setelah capture jika diinginkan
+//                     val currentIndex = scanSteps.indexOf(currentStep)
+//                     if (currentIndex < scanSteps.size - 1) {
+//                         currentStep = scanSteps[currentIndex + 1]
+//                     } else {
+//                         Toast.makeText(context, "Semua langkah selesai!", Toast.LENGTH_SHORT).show()
+//                         viewModel.classifyTongue()
+//                     }
+//                }
+
                 cameraPreviewViewModel.captureImage(context) { file ->
                     viewModel.onSetImageFile(currentStep, file)
-                    // Otomatis lanjut ke step berikutnya setelah capture jika diinginkan
-                     val currentIndex = scanSteps.indexOf(currentStep)
-                     if (currentIndex < scanSteps.size - 1) {
-                         currentStep = scanSteps[currentIndex + 1]
-                     } else {
-                         Toast.makeText(context, "Semua langkah selesai!", Toast.LENGTH_SHORT).show()
-                         viewModel.classifyTongue()
-                     }
+                    val currentIndex = scanSteps.indexOf(currentStep)
+                    if (currentIndex < scanSteps.size - 1) {
+                        currentStep = scanSteps[currentIndex + 1]
+                    } else {
+                        // Ini adalah capture terakhir, jalankan klasifikasi penuh
+                        Toast.makeText(context, "Memproses hasil...", Toast.LENGTH_LONG).show()
+                        viewModel.runFullClassification()
+                    }
                 }
             },
             onGallery = {

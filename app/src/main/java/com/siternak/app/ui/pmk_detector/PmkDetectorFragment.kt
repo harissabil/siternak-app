@@ -61,7 +61,7 @@ class PmkDetectorFragment : Fragment() {
                         name = userName.value ?: "Pengguna",
                         onScanClick = {
                             requireView().findNavController().navigate(
-                                PmkDetectorFragmentDirections.actionNavigationPmkDetectorToScanFragment()
+                                PmkDetectorFragmentDirections.actionNavigationPmkDetectorToNavigationQuestionnaire()
                             )
                         },
                         onRiwayatClick = {  },
