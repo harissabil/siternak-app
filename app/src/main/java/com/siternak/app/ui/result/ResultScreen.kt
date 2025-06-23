@@ -57,7 +57,7 @@ fun ResultScreen(result: DetectionResult?, onSave: () -> Unit) {
         ) {
             item {
                 Text(
-                    text = "Presentase Harapan Hidup",
+                    text = "Tingkat Keparahan PMK",
                     style = MaterialTheme.typography.headlineMedium,
                     fontWeight = FontWeight.Bold
                 )
@@ -103,9 +103,9 @@ fun ResultScreen(result: DetectionResult?, onSave: () -> Unit) {
 @Composable
 fun ResultItem(classification: PartClassification) {
     val (icon, color) = when (classification.result.lowercase()) {
-        "normal" -> Icons.Default.CheckCircle to Color(0xFF16A34A) // Green
-        "sedang" -> Icons.Default.Warning to Color(0xFFF59E0B)    // Amber
-        "tinggi" -> Icons.Default.Error to Color(0xFFDC2626)      // Red
+        "0_sehat" -> Icons.Default.CheckCircle to Color(0xFF16A34A) // Green
+        "1_ringan" -> Icons.Default.Warning to Color(0xFFF59E0B)    // Amber
+        "3_berat" -> Icons.Default.Error to Color(0xFFDC2626)      // Red
         else -> Icons.Default.Error to Color.Gray
     }
 

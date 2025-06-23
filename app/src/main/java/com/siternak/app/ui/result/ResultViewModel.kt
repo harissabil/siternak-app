@@ -1,6 +1,5 @@
 package com.siternak.app.ui.result
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.siternak.app.ui.scan.DetectionResult
 import kotlinx.coroutines.flow.MutableStateFlow

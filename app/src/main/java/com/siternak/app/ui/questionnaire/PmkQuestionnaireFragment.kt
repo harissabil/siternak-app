@@ -10,6 +10,7 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.navArgs
 import com.siternak.app.core.theme.SiTernakTheme
 import com.siternak.app.databinding.FragmentPmkQuestionnaireBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -20,11 +21,13 @@ class PmkQuestionnaireFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: PmkQuestionnaireViewModel by viewModel()
+    private val args: PmkQuestionnaireFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
+        viewModel.setInitialScanResult(args.scanResult)
         _binding = FragmentPmkQuestionnaireBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -41,11 +44,11 @@ class PmkQuestionnaireFragment : Fragment() {
                     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
                     // Observer untuk navigasi
-                    LaunchedEffect(state.navigateToScan) {
-                        if (state.navigateToScan) {
-                            val action = PmkQuestionnaireFragmentDirections.actionNavigationQuestionnaireToNavigationScan()
+                    LaunchedEffect(state.navigateToResult) {
+                        if (state.navigateToResult && state.finalResult != null) {
+                            val action = PmkQuestionnaireFragmentDirections.actionNavigationQuestionnaireToNavigationResult(state.finalResult!!)
                             findNavController().navigate(action)
-                            viewModel.onNavigationHandled() // Reset trigger
+                            viewModel.onResultNavigationHandled()
                         }
                     }
 

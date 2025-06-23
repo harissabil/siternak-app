@@ -40,6 +40,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -102,11 +103,11 @@ class ScanFragment : Fragment() {
                         }
                     }
 
-                    LaunchedEffect(state.navigateToResult) {
-                        if (state.navigateToResult && state.detectionResult != null) {
-                            val action = ScanFragmentDirections.actionNavigationScanToNavigationResult(state.detectionResult!!)
+                    LaunchedEffect(state.navigateToQuestionnaire) {
+                        if (state.navigateToQuestionnaire && state.scanResult != null) {
+                            val action = ScanFragmentDirections.actionNavigationScanToNavigationQuestionnaire(state.scanResult!!)
                             findNavController().navigate(action)
-                            viewModel.onResultNavigationHandled() // Reset trigger
+                            viewModel.onNavigationHandled() // Reset trigger
                         }
                     }
 
@@ -218,35 +219,24 @@ fun ScanScreen(
             },
             onNext = {
                 val currentIndex = scanSteps.indexOf(currentStep)
+                // Cek jika langkah selanjutnya ada
                 if (currentIndex < scanSteps.size - 1) {
                     currentStep = scanSteps[currentIndex + 1]
                 } else {
-                    // TODO: Handle Selesai atau navigasi ke layar berikutnya
-                    Toast.makeText(context, "Semua langkah selesai!", Toast.LENGTH_SHORT).show()
+                    // Jika ini langkah terakhir, tombol Next seharusnya tidak ada/disable
+                    // Navigasi dipicu oleh tombol capture
                 }
             },
             onCapture = {
-//                cameraPreviewViewModel.captureImage(context) { file ->
-//                    viewModel.onSetImageFile(currentStep, file)
-//                    // Otomatis lanjut ke step berikutnya setelah capture jika diinginkan
-//                     val currentIndex = scanSteps.indexOf(currentStep)
-//                     if (currentIndex < scanSteps.size - 1) {
-//                         currentStep = scanSteps[currentIndex + 1]
-//                     } else {
-//                         Toast.makeText(context, "Semua langkah selesai!", Toast.LENGTH_SHORT).show()
-//                         viewModel.classifyTongue()
-//                     }
-//                }
-
                 cameraPreviewViewModel.captureImage(context) { file ->
                     viewModel.onSetImageFile(currentStep, file)
                     val currentIndex = scanSteps.indexOf(currentStep)
                     if (currentIndex < scanSteps.size - 1) {
                         currentStep = scanSteps[currentIndex + 1]
                     } else {
-                        // Ini adalah capture terakhir, jalankan klasifikasi penuh
-                        Toast.makeText(context, "Memproses hasil...", Toast.LENGTH_LONG).show()
-                        viewModel.runFullClassification()
+                        // Ini adalah capture terakhir, proses semua hasil scan
+                        Toast.makeText(context, "Memproses hasil scan...", Toast.LENGTH_SHORT).show()
+                        viewModel.processScansAndNavigate()
                     }
                 }
             },
@@ -387,16 +377,26 @@ fun BottomControls(
                 color = Color.Black
             )
 
-            IconButton(
-                onClick = onNext,
-                enabled = scanSteps.indexOf(currentStep) < scanSteps.size - 1 // Disable jika step terakhir
-            ) {
-                Icon(
-                    Icons.AutoMirrored.Filled.ArrowForwardIos,
-                    contentDescription = "Next Step",
-                    modifier = Modifier.size(28.dp),
-                    tint = if (scanSteps.indexOf(currentStep) < scanSteps.size - 1) MaterialTheme.colorScheme.primary else Color.LightGray
-                )
+            // Logika Tombol Next/Lewati
+            val isLastStep = scanSteps.indexOf(currentStep) == scanSteps.size - 1
+
+            if (currentStep.isOptional && !isLastStep) {
+                TextButton(onClick = onNext) {
+                    Text("Lewati")
+                }
+            } else {
+                // Tombol panah maju standar
+                IconButton(
+                    onClick = onNext,
+                    enabled = !isLastStep
+                ) {
+                    Icon(
+                        Icons.AutoMirrored.Filled.ArrowForwardIos,
+                        contentDescription = "Next Step",
+                        modifier = Modifier.size(28.dp),
+                        tint = if (!isLastStep) MaterialTheme.colorScheme.primary else Color.LightGray
+                    )
+                }
             }
         }
 

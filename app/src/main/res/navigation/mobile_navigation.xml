@@ -38,19 +38,22 @@
         android:label="ScanFragment"
         tools:layout="@layout/fragment_scan">
         <action
-            android:id="@+id/action_navigation_scan_to_navigation_result"
-            app:destination="@id/navigation_result"
-            app:popUpTo="@id/navigation_pmk_detector"
-            app:popUpToInclusive="false" />
+            android:id="@+id/action_navigation_scan_to_navigation_questionnaire"
+            app:destination="@id/navigation_questionnaire" />
     </fragment>
     <fragment
         android:id="@+id/navigation_questionnaire"
         android:name="com.siternak.app.ui.questionnaire.PmkQuestionnaireFragment"
         android:label="fragment_pmk_questionnaire"
         tools:layout="@layout/fragment_pmk_questionnaire">
+        <argument
+            android:name="scanResult"
+            app:argType="com.siternak.app.ui.scan.PartScanResult" />
         <action
-            android:id="@+id/action_navigation_questionnaire_to_navigation_scan"
-            app:destination="@id/navigation_scan" />
+            android:id="@+id/action_navigation_questionnaire_to_navigation_result"
+            app:destination="@id/navigation_result"
+            app:popUpTo="@id/navigation_pmk_detector"
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/navigation_result"

@@ -1,13 +1,10 @@
 package com.siternak.app.ui.scan
 
-import android.R.attr.bitmap
 import android.graphics.BitmapFactory
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.siternak.app.data.ml.PMKLidahClassifier
+import com.siternak.app.data.ml.PMKClassifier
 import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -19,7 +16,10 @@ import kotlinx.coroutines.launch
 import java.io.File
 
 class ScanViewModel(
-    private val pmkLidahClassifier: PMKLidahClassifier
+    private val gusiClassifier: PMKClassifier,
+    private val lidahClassifier: PMKClassifier,
+    private val airLiurClassifier: PMKClassifier,
+    private val kakiClassifier: PMKClassifier
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(ScanState())
@@ -33,79 +33,64 @@ class ScanViewModel(
             when (currentStep) {
                 ScanStep.MOUTH -> currentState.copy(mouthFile = file)
                 ScanStep.TONGUE -> currentState.copy(tongueFile = file)
-                ScanStep.SALIVA -> currentState.copy(salivaFile = file)
+                ScanStep.SALIVA -> currentState.copy(gumFile = file)
                 ScanStep.FOOT -> currentState.copy(footFile = file)
             }
         }
     }
 
     /**
-     * Fungsi ini akan menjalankan klasifikasi untuk semua gambar yang telah diambil.
+     * Fungsi ini sekarang memproses gambar, mendapatkan hasil Int, dan memicu navigasi ke Kuesioner
      */
-    fun runFullClassification() = viewModelScope.launch {
+    fun processScansAndNavigate() = viewModelScope.launch {
         val currentState = _state.value
-        val filesToClassify = mapOf(
-            "Mulut" to currentState.mouthFile,
-            "Lidah" to currentState.tongueFile,
-            "Air Liur" to currentState.salivaFile,
-            "Kaki" to currentState.footFile
-        ).filterValues { it != null }
-
-        if (filesToClassify.size < 4) {
-            _errorMessage.emit("Harap lengkapi semua foto sebelum melanjutkan.")
+        if (currentState.mouthFile == null || currentState.footFile == null) {
+            _errorMessage.emit("Foto Mulut dan Kaki wajib diisi.")
             return@launch
         }
-
         _state.update { it.copy(isLoading = true) }
 
-        // Proses klasifikasi secara paralel
-        val classificationJobs = filesToClassify.map { (partName, file) ->
-            async {
-                // NOTE: Ini hanya contoh. Anda harus menggunakan model yang sesuai untuk setiap bagian.
-                // Saat ini kita hanya menggunakan pmkLidahClassifier untuk semua sebagai placeholder.
-                // Ganti dengan classifier yang benar.
-                val bitmap = BitmapFactory.decodeFile(file!!.path)
-                val (className, confidence) = when (partName) {
-                    "Lidah" -> pmkLidahClassifier.classifyImage(bitmap)
-                    // Ganti dengan pemanggilan model yang sesuai
-                    "Mulut" -> Pair("0_sehat", 0.9f)
-                    "Air Liur" -> Pair("2_sedang", 0.75f)
-                    "Kaki" -> Pair("3_berat", 0.88f)
-                    else -> Pair("Unknown", 0f)
-                }
-                Log.d("ScanVM", "Hasil $partName: $className (${confidence * 100}%)")
-                PartClassification(partName, className, confidence)
+        // Helper untuk menjalankan model dan mendapatkan hasil Int
+        suspend fun getClassificationResult(file: File?, step: ScanStep): Int? {
+            if (file == null) return null
+
+            val bitmap = BitmapFactory.decodeFile(file.path)
+
+            // Pilih classifier yang benar berdasarkan langkah/step
+            val (className, _) = when (step) {
+                // Ingat: UI "Mulut" adalah Gusi, UI "Air Liur" adalah Air Liur
+                ScanStep.MOUTH -> gusiClassifier.classifyImage(bitmap)
+                ScanStep.TONGUE -> lidahClassifier.classifyImage(bitmap)
+                ScanStep.SALIVA -> airLiurClassifier.classifyImage(bitmap)
+                ScanStep.FOOT -> kakiClassifier.classifyImage(bitmap)
             }
+
+            // Konversi nama kelas (e.g., "1_ringan") menjadi Int
+            return className.substringBefore('_').toIntOrNull()
         }
 
-        val results = classificationJobs.awaitAll()
+        val mouthResultDef = async { getClassificationResult(currentState.mouthFile, ScanStep.MOUTH)!! }
+        val tongueResultDef = async { getClassificationResult(currentState.tongueFile, ScanStep.TONGUE) }
+        val gumResultDef = async { getClassificationResult(currentState.gumFile, ScanStep.SALIVA) }
+        val footResultDef = async { getClassificationResult(currentState.footFile, ScanStep.FOOT)!! }
 
-        // Kalkulasi skor "Harapan Hidup" (Contoh Logika)
-        // Normal = 100, Sedang = 60, Tinggi = 20
-        val totalScore = results.map { classification ->
-            when (classification.result.lowercase()) {
-                "0_sehat" -> 100
-                "1_ringan" -> 75
-                "2_sedang" -> 50
-                "3_berat" -> 25
-                else -> 0
-            }
-        }.sum()
-        val overallPercentage = if (results.isNotEmpty()) totalScore / results.size else 0
-
-        val finalResult = DetectionResult(overallPercentage, results)
+        val scanResult = PartScanResult(
+            mouthResult = mouthResultDef.await(),
+            tongueResult = tongueResultDef.await(),
+            gumResult = gumResultDef.await(),
+            footResult = footResultDef.await()
+        )
 
         _state.update {
             it.copy(
                 isLoading = false,
-                detectionResult = finalResult,
-                navigateToResult = true // Siap untuk navigasi
+                scanResult = scanResult,
+                navigateToQuestionnaire = true // Memicu navigasi
             )
         }
     }
 
-    // Fungsi untuk mereset trigger navigasi setelah navigasi dilakukan
-    fun onResultNavigationHandled() {
-        _state.update { it.copy(navigateToResult = false, detectionResult = null) }
+    fun onNavigationHandled() {
+        _state.update { it.copy(navigateToQuestionnaire = false, scanResult = null) }
     }
 }

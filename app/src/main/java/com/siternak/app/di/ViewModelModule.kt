@@ -13,7 +13,9 @@ import com.siternak.app.ui.register.RegisterViewModel
 import com.siternak.app.ui.result.ResultViewModel
 import com.siternak.app.ui.scan.ScanViewModel
 import com.siternak.app.ui.user_form.UserFormViewModel
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.androidx.viewmodel.dsl.viewModelOf
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val viewModelModule = module {
@@ -27,7 +29,14 @@ val viewModelModule = module {
     viewModelOf(::ProfileViewModel)
     viewModelOf(::ProfileDetailViewModel)
     viewModelOf(::PmkDetectorViewModel)
-    viewModelOf(::ScanViewModel)
+    viewModel {
+        ScanViewModel(
+            gusiClassifier = get(named("gusiClassifier")),
+            lidahClassifier = get(named("lidahClassifier")),
+            airLiurClassifier = get(named("airLiurClassifier")),
+            kakiClassifier = get(named("kakiClassifier"))
+        )
+    }
     viewModelOf(::PmkQuestionnaireViewModel)
     viewModelOf(::ResultViewModel)
 }

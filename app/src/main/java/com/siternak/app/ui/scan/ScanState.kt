@@ -7,8 +7,8 @@ data class ScanState(
     val isLoading: Boolean = false,
     val mouthFile: File? = null,
     val tongueFile: File? = null,
-    val salivaFile: File? = null,
+    val gumFile: File? = null,
     val footFile: File? = null,
-    val detectionResult: DetectionResult? = null, // Untuk menampung hasil akhir
-    val navigateToResult: Boolean = false // Trigger untuk navigasi
+    val scanResult: PartScanResult? = null, // Hasil scan dalam bentuk Int
+    val navigateToQuestionnaire: Boolean = false // Trigger navigasi baru
 )
